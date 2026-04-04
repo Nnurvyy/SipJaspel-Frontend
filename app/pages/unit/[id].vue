@@ -148,13 +148,13 @@
             <tbody>
               <tr v-for="(item, idx) in rows" :key="item.pegawaiId">
                 <td>{{ idx + 1 }}</td>
-                <td style="white-space:nowrap"><strong>{{ item.nama }}</strong></td>
-                <td class="right bobot-cell">{{ item.bobot || '—' }}</td>
+                <td style="white-space:nowrap"><strong>{{ item?.nama }}</strong></td>
+                <td class="right bobot-cell">{{ item?.bobot || '—' }}</td>
 
                 <!-- Dynamic group columns (per peran) -->
                 <template v-for="group in unitConfig.groups" :key="group.key + '_' + idx">
                   <td class="right input-td">
-                    {{ item.tindakanPeran[group.key] || '—' }}
+                    {{ item?.tindakanPeran?.[group.key] || '—' }}
                   </td>
                   <td class="right adj-cell">
                     {{ fmtNum(computeItemAdjusted(item, group.key)) }}
@@ -636,8 +636,8 @@ const openEdit = (item: any) => {
   const t: Record<string, number> = {}
   const adj: Record<string, number> = {}
   unitConfig.value.groups?.forEach((g: any) => {
-    t[g.key] = item.tindakanPeran[g.key] || 0
-    adj[g.key] = item.adjustedPeran?.[g.key]
+    t[g.key] = item?.tindakanPeran?.[g.key] || 0
+    adj[g.key] = item?.adjustedPeran?.[g.key]
     
     // If no existing adjusted in DB, pre-calculate for modal
     if (adj[g.key] === null || adj[g.key] === undefined) {

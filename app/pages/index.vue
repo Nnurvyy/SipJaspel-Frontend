@@ -69,7 +69,7 @@ watch(stats, () => {
 })
 
 const exportAllExcel = () => {
-  window.open(`${config.public.apiBase}/export-rekap/${selectedPeriode.value}`, '_blank');
+  window.open(`${config.public.apiBase}/export/all/${selectedPeriode.value}`, '_blank');
 }
 </script>
 
@@ -82,7 +82,7 @@ const exportAllExcel = () => {
       </div>
       <button class="export-btn" @click="exportAllExcel" style="padding: 10px 20px; font-size: 14px; border-radius: 12px; background: var(--sidebar-bg); color: #fff; display: flex; align-items: center; gap: 8px; border:none; cursor:pointer;">
         <svg style="width:18px; height:18px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        Revisi Export (Excel)
+        Export Excel
       </button>
     </div>
 
