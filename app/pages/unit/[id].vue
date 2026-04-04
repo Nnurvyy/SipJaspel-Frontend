@@ -9,37 +9,37 @@
     <div v-else-if="error" class="alert error" style="margin-top:20px">Gagal mengambil data. Pastikan backend berjalan.</div>
 
     <div v-else>
-      <!-- ===== UNIT FINANCIAL SUMMARY (New Section) ===== -->
-      <div class="card summary-card" v-if="summaryData">
+      <!-- ===== UNIT FINANCIAL SUMMARY (Refined Section) ===== -->
+      <div class="card summary-card modern-summary" v-if="summaryData">
         <div class="summary-table-wrapper">
           <table class="summary-header-table">
             <thead>
               <tr>
-                <th class="label-col"></th>
-                <th class="data-col">NON KAPITASI</th>
-                <th class="data-col">PAD MURNI</th>
+                <th class="label-col">DESKRIPSI PENDAPATAN</th>
+                <th class="data-col">NON KAPITASI (Rp)</th>
+                <th class="data-col">PAD MURNI (Rp)</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td class="row-label">JUMLAH NON KAPITASI / PAD RANAP</td>
-                <td class="amount-cell">Rp {{ formatRp(summaryData.nonKapitasi.total) }}</td>
-                <td class="amount-cell">Rp {{ formatRp(summaryData.padMurni.total) }}</td>
+                <td class="row-label">Jumlah Pendapatan Unit</td>
+                <td class="amount-cell main-val">{{ formatRp(summaryData.nonKapitasi.total) }}</td>
+                <td class="amount-cell main-val">{{ formatRp(summaryData.padMurni.total) }}</td>
               </tr>
-              <tr>
-                <td class="row-label">TIDAK LANGSUNG (60%)</td>
-                <td class="amount-cell">Rp {{ formatRp(summaryData.nonKapitasi.tidakLangsung) }}</td>
-                <td class="amount-cell">Rp {{ formatRp(summaryData.padMurni.tidakLangsung) }}</td>
+              <tr class="sub-row">
+                <td class="row-label indent">Alokasi Tidak Langsung (60%)</td>
+                <td class="amount-cell secondary-val">{{ formatRp(summaryData.nonKapitasi.tidakLangsung) }}</td>
+                <td class="amount-cell secondary-val">{{ formatRp(summaryData.padMurni.tidakLangsung) }}</td>
               </tr>
-              <tr>
-                <td class="row-label">LANGSUNG (40%)</td>
-                <td class="amount-cell">Rp {{ formatRp(summaryData.nonKapitasi.langsung) }}</td>
-                <td class="amount-cell">Rp {{ formatRp(summaryData.padMurni.langsung) }}</td>
+              <tr class="highlight-row">
+                <td class="row-label indent"><strong>Jasa Pelayanan Langsung (40%)</strong></td>
+                <td class="amount-cell primary-val"><strong>{{ formatRp(summaryData.nonKapitasi.langsung) }}</strong></td>
+                <td class="amount-cell primary-val"><strong>{{ formatRp(summaryData.padMurni.langsung) }}</strong></td>
               </tr>
             </tbody>
             <tfoot>
                <tr>
-                 <td class="row-label total">GRAND TOTAL LANGSUNG (40%)</td>
+                 <td class="row-label total">GRAND TOTAL JASPEL TERSEDIA (40%)</td>
                  <td colspan="2" class="amount-cell grand-total">
                    Rp {{ formatRp(summaryData.nonKapitasi.langsung + summaryData.padMurni.langsung) }}
                  </td>
@@ -50,15 +50,15 @@
       </div>
 
       <!-- ===== HEADER: Pagu Dana per Peran ===== -->
-      <div class="card pagu-card">
+      <div class="card pagu-card modern-pagu">
         <div class="card-header">
           <div class="card-title-group">
-            <div class="card-title">💰 Pagu Dana Langsung — {{ unitConfig.title }}</div>
+            <div class="card-title">💰 Alokasi Pagu Dana — {{ unitConfig.title }}</div>
           </div>
-          <div class="card-subtitle">Atur pembagian jaspel berdasarkan <strong>persentase (%)</strong> untuk setiap peran. Nominal (Rp) akan terhitung otomatis dari dana Langsung (40%) unit.</div>
+          <div class="card-subtitle">Tentukan persentase (%) pembagian untuk setiap kelompok peran. Nominal (Rp) otomatis menyesuaikan.</div>
         </div>
         <div class="pagu-grid" v-if="Object.keys(pagu).length > 0">
-          <div v-for="group in unitConfig.groups" :key="group.key" class="pagu-group">
+          <div v-for="group in unitConfig.groups" :key="group.key" class="pagu-group" :style="getRoleStyle(group.key, true)">
             <div class="pagu-group-label">{{ group.label }}</div>
             <div class="pagu-inputs">
               <div class="pagu-input-wrap">
@@ -67,7 +67,7 @@
                   <div class="input-with-unit">
                     <input
                       v-if="pagu[group.key]"
-                      v-model.number="pagu[group.key].nonKap"
+                      v-model.number="pagu[group.key]!.nonKap"
                       type="number"
                       class="form-input pagu-input-small"
                       placeholder="0"
@@ -87,7 +87,7 @@
                   <div class="input-with-unit">
                     <input
                       v-if="pagu[group.key]"
-                      v-model.number="pagu[group.key].padMurni"
+                      v-model.number="pagu[group.key]!.padMurni"
                       type="number"
                       class="form-input pagu-input-small"
                       placeholder="0"
@@ -111,12 +111,12 @@
         <div class="card-header">
           <div class="card-title">{{ unitConfig.title }} — Distribusi Jaspel Langsung ({{ selectedPeriode }})</div>
           <div class="card-subtitle">
-            Bobot diambil otomatis dari Master Bobot Staff. Input Jumlah Tindakan → perhitungan real-time.
+            Pembagian otomatis berdasarkan bobot dan jumlah tindakan/poin yang diinput.
           </div>
         </div>
 
         <div class="table-scroll">
-          <table :id="`tbl-unit-${unitId}`">
+          <table :id="`tbl-unit-${unitId}`" class="modern-table">
             <thead>
               <!-- Row 1: Group headers -->
               <tr>
@@ -128,20 +128,20 @@
                   :key="group.key + '_h'"
                   colspan="4"
                   class="group-th"
-                  :style="group.thStyle || ''"
+                  :style="getRoleStyle(group.key)"
                 >{{ group.label }}</th>
-                <th rowspan="2" class="total-th">Total Jaspel<br>Non Kap</th>
-                <th rowspan="2" class="total-th">Total Jaspel<br>PAD Murni</th>
-                <th rowspan="2" class="total-th grand-th">TOTAL<br>JASPEL</th>
+                <th rowspan="2" class="total-th">Non Kap</th>
+                <th rowspan="2" class="total-th">PAD Murni</th>
+                <th rowspan="2" class="total-th grand-th">TOTAL</th>
                 <th rowspan="2">Aksi</th>
               </tr>
               <!-- Row 2: Sub-headers -->
               <tr>
                 <template v-for="group in unitConfig?.groups || []" :key="group.key + '_sub'">
-                  <th>{{ group.inputLabel || 'Jumlah' }}<br>{{ group.subLabel }}</th>
-                  <th>Adjusted<br>{{ group.label }}</th>
-                  <th>Jaspel Non Kap<br>{{ group.label }}</th>
-                  <th>Jaspel PAD Murni<br>{{ group.label }}</th>
+                  <th :style="getRoleSubStyle(group.key)">{{ group.inputLabel || 'Jml' }}</th>
+                  <th :style="getRoleSubStyle(group.key)">Adj</th>
+                  <th :style="getRoleSubStyle(group.key)">Jaspel NK</th>
+                  <th :style="getRoleSubStyle(group.key)">Jaspel PAD</th>
                 </template>
               </tr>
             </thead>
@@ -187,8 +187,8 @@
               </tr>
 
               <!-- Subtotal row -->
-              <tr v-if="rows.length > 0" class="subtotal-row">
-                <td colspan="3" style="text-align:right;font-weight:700">TOTAL</td>
+              <tr v-if="rows.length > 0" class="total-row">
+                <td colspan="3" style="text-align:right">TOTAL</td>
                 <template v-for="group in unitConfig.groups" :key="group.key + '_tot'">
                   <td></td>
                   <td></td>
@@ -267,7 +267,7 @@ const unitId = computed(() => route.params.id as string)
 const periodeLabel = computed(() => {
   const [y, m] = selectedPeriode.value.split('-')
   const bulan = ['', 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember']
-  return `${bulan[parseInt(m)]} ${y}`
+  return `${bulan[parseInt(m || '0')] || ''} ${y || ''}`
 })
 
 // ===== Unit Configs =====
@@ -277,7 +277,7 @@ const UNIT_CONFIGS: Record<string, any> = {
     groups: [
       { key: 'dokter', label: 'Dokter', subLabel: 'Tindakan', inputLabel: 'Jumlah', percent: 20 },
       { key: 'perawat', label: 'Perawat', subLabel: 'Tindakan', inputLabel: 'Jumlah', percent: 70 },
-      { key: 'pengelola', label: 'Pejabat Pengelola BLUD', subLabel: 'Pengelola', inputLabel: 'Poin', thStyle: 'background:#fef9c3;color:#a16207;border-bottom-color:#ca8a04', percent: 10 },
+      { key: 'pengelola', label: 'Pejabat Pengelola BLUD', subLabel: 'Pengelola', inputLabel: 'Poin', percent: 10 },
     ]
   },
   'one-day-care': {
@@ -285,7 +285,7 @@ const UNIT_CONFIGS: Record<string, any> = {
     groups: [
       { key: 'dokter', label: 'Dokter', subLabel: 'Tindakan', inputLabel: 'Jumlah', percent: 30 },
       { key: 'perawat', label: 'Perawat', subLabel: 'Tindakan', inputLabel: 'Jumlah', percent: 60 },
-      { key: 'pengelola', label: 'Pejabat Pengelola BLUD', subLabel: 'Pengelola', inputLabel: 'Poin', thStyle: 'background:#fef9c3;color:#a16207;border-bottom-color:#ca8a04', percent: 10 },
+      { key: 'pengelola', label: 'Pejabat Pengelola BLUD', subLabel: 'Pengelola', inputLabel: 'Poin', percent: 10 },
     ]
   },
   'poned': {
@@ -297,7 +297,7 @@ const UNIT_CONFIGS: Record<string, any> = {
       { key: 'pendamping_rujukan', label: 'Pendamping Rujukan', subLabel: 'Rujukan', inputLabel: 'Jumlah', percent: 5 },
       { key: 'penolong_persalinan', label: 'Penolong Persalinan', subLabel: 'Persalinan', inputLabel: 'Jumlah', percent: 10 },
       { key: 'manajemen_poned', label: 'Manajemen PONED', subLabel: 'Manajemen', inputLabel: 'Poin', percent: 5 },
-      { key: 'pengelola', label: 'Pejabat Pengelola BLUD', subLabel: 'Pengelola', inputLabel: 'Poin', thStyle: 'background:#fef9c3;color:#a16207;border-bottom-color:#ca8a04', percent: 10 },
+      { key: 'pengelola', label: 'Pejabat Pengelola BLUD', subLabel: 'Pengelola', inputLabel: 'Poin', percent: 10 },
     ]
   },
   'konseling': {
@@ -305,7 +305,7 @@ const UNIT_CONFIGS: Record<string, any> = {
     groups: [
       { key: 'dokter', label: 'Dokter', subLabel: 'Konsultasi', inputLabel: 'Jumlah', percent: 30 },
       { key: 'petugas', label: 'Petugas Konseling', subLabel: 'Konsultasi', inputLabel: 'Jumlah', percent: 60 },
-      { key: 'pengelola', label: 'Pejabat Pengelola BLUD', subLabel: 'Pengelola', inputLabel: 'Poin', thStyle: 'background:#fef9c3;color:#a16207;border-bottom-color:#ca8a04', percent: 10 },
+      { key: 'pengelola', label: 'Pejabat Pengelola BLUD', subLabel: 'Pengelola', inputLabel: 'Poin', percent: 10 },
     ]
   },
   'haji': {
@@ -313,7 +313,7 @@ const UNIT_CONFIGS: Record<string, any> = {
     groups: [
       { key: 'dokter', label: 'Dokter', subLabel: 'Tindakan', inputLabel: 'Jumlah', percent: 30 },
       { key: 'perawat_bidan', label: 'Perawat/Bidan', subLabel: 'Tindakan', inputLabel: 'Jumlah', percent: 60 },
-      { key: 'pengelola', label: 'Pejabat Pengelola BLUD', subLabel: 'Pengelola', inputLabel: 'Poin', thStyle: 'background:#fef9c3;color:#a16207;border-bottom-color:#ca8a04', percent: 10 },
+      { key: 'pengelola', label: 'Pejabat Pengelola BLUD', subLabel: 'Pengelola', inputLabel: 'Poin', percent: 10 },
     ]
   },
   'kia': {
@@ -321,7 +321,7 @@ const UNIT_CONFIGS: Record<string, any> = {
     groups: [
       { key: 'dokter', label: 'Dokter', subLabel: 'Tindakan', inputLabel: 'Jumlah', percent: 30 },
       { key: 'perawat_bidan', label: 'Perawat/Bidan', subLabel: 'Tindakan', inputLabel: 'Jumlah', percent: 60 },
-      { key: 'pengelola', label: 'Pejabat Pengelola BLUD', subLabel: 'Pengelola', inputLabel: 'Poin', thStyle: 'background:#fef9c3;color:#a16207;border-bottom-color:#ca8a04', percent: 10 },
+      { key: 'pengelola', label: 'Pejabat Pengelola BLUD', subLabel: 'Pengelola', inputLabel: 'Poin', percent: 10 },
     ]
   },
   'usg': {
@@ -329,7 +329,7 @@ const UNIT_CONFIGS: Record<string, any> = {
     groups: [
       { key: 'dokter', label: 'Dokter', subLabel: 'Tindakan', inputLabel: 'Jumlah', percent: 35 },
       { key: 'perawat_bidan', label: 'Perawat/Bidan', subLabel: 'Tindakan', inputLabel: 'Jumlah', percent: 55 },
-      { key: 'pengelola', label: 'Pejabat Pengelola BLUD', subLabel: 'Pengelola', inputLabel: 'Poin', thStyle: 'background:#fef9c3;color:#a16207;border-bottom-color:#ca8a04', percent: 10 },
+      { key: 'pengelola', label: 'Pejabat Pengelola BLUD', subLabel: 'Pengelola', inputLabel: 'Poin', percent: 10 },
     ]
   },
   'kb': {
@@ -337,7 +337,7 @@ const UNIT_CONFIGS: Record<string, any> = {
     groups: [
       { key: 'dokter', label: 'Dokter', subLabel: 'Tindakan', inputLabel: 'Jumlah', percent: 30 },
       { key: 'perawat_bidan', label: 'Perawat/Bidan', subLabel: 'Tindakan', inputLabel: 'Jumlah', percent: 60 },
-      { key: 'pengelola', label: 'Pejabat Pengelola BLUD', subLabel: 'Pengelola', inputLabel: 'Poin', thStyle: 'background:#fef9c3;color:#a16207;border-bottom-color:#ca8a04', percent: 10 },
+      { key: 'pengelola', label: 'Pejabat Pengelola BLUD', subLabel: 'Pengelola', inputLabel: 'Poin', percent: 10 },
     ]
   },
   'lab': {
@@ -345,7 +345,7 @@ const UNIT_CONFIGS: Record<string, any> = {
     groups: [
       { key: 'dokter', label: 'Dokter', subLabel: 'Tindakan', inputLabel: 'Jumlah', percent: 20 },
       { key: 'atlm', label: 'ATLM', subLabel: 'Tindakan', inputLabel: 'Jumlah', percent: 70 },
-      { key: 'pengelola', label: 'Pejabat Pengelola BLUD', subLabel: 'Pengelola', inputLabel: 'Poin', thStyle: 'background:#fef9c3;color:#a16207;border-bottom-color:#ca8a04', percent: 10 },
+      { key: 'pengelola', label: 'Pejabat Pengelola BLUD', subLabel: 'Pengelola', inputLabel: 'Poin', percent: 10 },
     ]
   },
   'poli-umum': {
@@ -353,7 +353,7 @@ const UNIT_CONFIGS: Record<string, any> = {
     groups: [
       { key: 'dokter', label: 'Dokter', subLabel: 'Tindakan', inputLabel: 'Jumlah', percent: 30 },
       { key: 'perawat', label: 'Perawat', subLabel: 'Tindakan', inputLabel: 'Jumlah', percent: 60 },
-      { key: 'pengelola', label: 'Pejabat Pengelola BLUD', subLabel: 'Pengelola', inputLabel: 'Poin', thStyle: 'background:#fef9c3;color:#a16207;border-bottom-color:#ca8a04', percent: 10 },
+      { key: 'pengelola', label: 'Pejabat Pengelola BLUD', subLabel: 'Pengelola', inputLabel: 'Poin', percent: 10 },
     ]
   },
   'gigi': {
@@ -361,7 +361,7 @@ const UNIT_CONFIGS: Record<string, any> = {
     groups: [
       { key: 'dokter', label: 'Dokter', subLabel: 'Tindakan', inputLabel: 'Jumlah', percent: 50 },
       { key: 'perawat', label: 'Perawat Gigi', subLabel: 'Tindakan', inputLabel: 'Jumlah', percent: 40 },
-      { key: 'pengelola', label: 'Pejabat Pengelola BLUD', subLabel: 'Pengelola', inputLabel: 'Poin', thStyle: 'background:#fef9c3;color:#a16207;border-bottom-color:#ca8a04', percent: 10 },
+      { key: 'pengelola', label: 'Pejabat Pengelola BLUD', subLabel: 'Pengelola', inputLabel: 'Poin', percent: 10 },
     ]
   },
   'ambulans': {
@@ -369,15 +369,43 @@ const UNIT_CONFIGS: Record<string, any> = {
     groups: [
       { key: 'perawat_bidan', label: 'Perawat/Bidan', subLabel: 'Tindakan', inputLabel: 'Jumlah', percent: 50 },
       { key: 'pengemudi', label: 'Pengemudi', subLabel: 'Penugasan', inputLabel: 'Jumlah', percent: 40 },
-      { key: 'pengelola', label: 'Pejabat Pengelola BLUD', subLabel: 'Pengelola', inputLabel: 'Poin', thStyle: 'background:#fef9c3;color:#a16207;border-bottom-color:#ca8a04', percent: 10 },
+      { key: 'pengelola', label: 'Pejabat Pengelola BLUD', subLabel: 'Pengelola', inputLabel: 'Poin', percent: 10 },
     ]
   },
 }
 
-const unitConfig = computed(() => {
-  const id = unitId.value || ''
-  return UNIT_CONFIGS[id] || { title: id, groups: [] }
-})
+const unitConfig = computed(() => (UNIT_CONFIGS as any)[unitId.value] || UNIT_CONFIGS['ugd'])
+
+const getRoleStyle = (key: string, isCard = false) => {
+  let bg = '#f8fafc'
+  let text = 'var(--text-primary)'
+  let border = 'var(--border)'
+  
+  if (key === 'dokter') { 
+    bg = '#eff6ff'; text = '#1e40af'; border = '#3b82f6';
+  } else if (key.includes('perawat') || key.includes('atlm') || key.includes('petugas') || key === 'penolong_persalinan' || key.includes('pengemudi')) { 
+    bg = '#f0fdf4'; text = '#166534'; border = '#22c55e';
+  } else if (key.includes('bidan')) { 
+    bg = '#fff1f2'; text = '#9f1239'; border = '#f43f5e';
+  } else if (key === 'pengelola' || key === 'manajemen_poned') { 
+    bg = '#fffbeb'; text = '#92400e'; border = '#f59e0b';
+  } else if (key === 'pendamping_rujukan') { 
+    bg = '#f5f3ff'; text = '#5b21b6'; border = '#8b5cf6';
+  }
+
+  return isCard 
+    ? `background: ${bg}; border-top: 4px solid ${border};` 
+    : `background: ${bg}; color: ${text}; border-bottom: 2px solid ${border}; font-weight: 700; text-align: center;`
+}
+
+const getRoleSubStyle = (key: string) => {
+  let text = 'var(--text-secondary)'
+  if (key === 'dokter') text = 'var(--role-dokter-text)'
+  else if (key.includes('perawat') || key.includes('atlm') || key.includes('petugas') || key === 'penolong_persalinan' || key.includes('pengemudi')) text = 'var(--role-perawat-text)'
+  else if (key.includes('bidan')) text = 'var(--role-bidan-text)'
+  else if (key === 'pengelola' || key === 'manajemen_poned') text = 'var(--role-pengelola-text)'
+  return `color: ${text}; font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.8;`
+}
 
 // ===== State =====
 const rows = ref<any[]>([])
@@ -614,10 +642,11 @@ const openEdit = (item: any) => {
     // If no existing adjusted in DB, pre-calculate for modal
     if (adj[g.key] === null || adj[g.key] === undefined) {
         const isAdminRole = g.key === 'pengelola' || g.key === 'manajemen_poned'
+        const b = item?.bobot || 0
         if (isAdminRole) {
             adj[g.key] = t[g.key] * 10
         } else {
-            adj[g.key] = t[g.key] * (item.bobot || 0)
+            adj[g.key] = t[g.key] * b
         }
     }
   })
@@ -757,65 +786,27 @@ const saveEdit = async () => {
 .override-input { background: #fffbeb !important; border-color: #fcd34d !important; color: #b45309 !important; font-weight: 700 !important; }
 
 .summary-table-wrapper { width: 100%; overflow-x: auto; }
-.summary-header-table { width: 100%; border-collapse: collapse; }
-.summary-header-table th, .summary-header-table td { padding: 12px 24px; border-bottom: 1px solid var(--border); font-size: 13px; }
-.summary-header-table th { background: var(--bg-level2); color: var(--text-secondary); font-weight: 700; text-align: left; font-size: 11px; letter-spacing: 0.5px; }
-.summary-header-table th.data-col { text-align: right; width: 200px; color: var(--accent-blue); }
-.row-label { font-weight: 600; color: var(--text-secondary); text-transform: uppercase; font-size: 11px; }
-.amount-cell { text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 600; color: var(--text); }
-.grand-total { color: var(--accent-blue); font-weight: 800; font-size: 15px; }
-.row-label.total { color: var(--accent-blue); }
+.modern-summary { border: none; box-shadow: var(--shadow-lg); overflow: hidden; }
+.summary-header-table thead th { background: #f8fafc; color: #64748b; font-size: 10px; padding: 16px 24px; border-bottom: 2px solid #e2e8f0; }
+.summary-header-table td { padding: 14px 24px; border-bottom: 1px solid #f1f5f9; }
+.main-val { color: var(--text-primary); font-weight: 700; font-size: 15px; }
+.secondary-val { color: var(--text-secondary); opacity: 0.8; }
+.primary-val { color: var(--accent-blue); font-size: 16px; }
+.highlight-row { background: #f0f9ff; }
+.indent { padding-left: 40px !important; }
+.grand-total { border-top: 2px solid var(--accent-blue); color: var(--accent-blue); font-size: 16px; font-weight: 800; padding: 12px 24px !important; text-align: right; }
 
-/* Pagu Card */
-.pagu-card { margin-bottom: 0; }
-.pagu-grid { display: flex; gap: 16px; flex-wrap: wrap; padding: 0 20px 20px; }
-.pagu-group { flex: 1; min-width: 220px; background: var(--bg-level2); border-radius: 10px; padding: 12px; border: 1px solid var(--border); }
-.pagu-group-label { font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--accent-blue); letter-spacing: 0.5px; margin-bottom: 10px; }
-.pagu-inputs { display: flex; flex-direction: column; gap: 8px; }
-.pagu-input-wrap { display: flex; flex-direction: column; gap: 3px; }
-.pagu-input-wrap label { font-size: 10px; font-weight: 600; color: var(--text-secondary); }
-.pagu-input { padding: 7px 10px; font-size: 12px; }
+.modern-pagu { border: none; box-shadow: none; margin-top: 10px; background: transparent; }
+.pagu-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 16px; padding: 4px; }
+.pagu-group { background: #fff; border-radius: 16px; padding: 20px; border: 1px solid var(--border); box-shadow: var(--shadow); transition: all 0.2s; display: flex; flex-direction: column; }
+.pagu-group-label { text-align: center; font-weight: 800; font-size: 15px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1px solid rgba(0,0,0,0.05); color: inherit; }
+.pagu-group:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
 
-/* Table Styling */
-.group-th { background: #eff6ff; color: var(--accent-blue); text-align: center; font-size: 11px; border-bottom: 2px solid var(--accent-blue) !important; }
-.total-th { background: #f0fdf4; color: var(--accent-teal); font-size: 11px; border-bottom: 2px solid var(--accent-teal) !important; }
-.grand-th { background: #eef2ff; color: #4f46e5; border-bottom-color: #4f46e5 !important; }
-.bobot-cell { color: var(--accent-teal); font-weight: 600; }
-.adj-cell { color: #6366f1; font-size: 12px; }
-.jaspel-cell { color: var(--accent-teal); }
-.jaspel-cell-pad { color: #10b981; }
-.total-cell { color: var(--accent-teal); font-weight: 600; }
-.grand { color: #4f46e5 !important; font-weight: 700; }
-.subtotal-row { background: var(--bg-level2); font-weight: 700; }
-table th { font-size: 11px; white-space: nowrap; }
-.input-td { font-weight: 600; }
+.modern-table thead th { background: #f8fafc; color: #475569; font-weight: 700; border-bottom: 2px solid #e2e8f0; }
+.modern-table .group-th { border-bottom-width: 3px !important; }
 
-/* Action Button */
-.action-btn { width: 28px; height: 28px; border-radius: 6px; border: 1px solid var(--border); background: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all .2s; color: var(--text-muted); }
-.action-btn:hover.edit { border-color: var(--accent-blue); color: var(--accent-blue); }
-.action-btn svg { width: 14px; height: 14px; }
+.action-btn { background: #f8fafc; border: 1px solid #e2e8f0; }
+.action-btn:hover { background: #eff6ff; border-color: var(--accent-blue); color: var(--accent-blue); }
 
-/* Modal */
-.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; display: flex; align-items: center; justify-content: center; }
-.modal-card { background: var(--bg); border-radius: 16px; width: 520px; max-width: 95vw; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
-.modal-header { padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: flex-start; position: sticky; top: 0; background: var(--bg); z-index: 1; }
-.modal-header h3 { margin: 0; font-size: 15px; font-weight: 700; }
-.modal-bobot-badge { margin-top: 4px; font-size: 12px; font-weight: 700; color: var(--accent-teal); }
-.modal-bobot-hint { font-weight: 400; color: var(--text-muted); font-size: 11px; }
-.modal-close { background: none; border: none; font-size: 24px; cursor: pointer; color: var(--text-muted); }
-.modal-body { padding: 24px; display: flex; flex-direction: column; gap: 14px; }
-.modal-unit-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding-bottom: 14px; border-bottom: 1px dashed var(--border); }
-.modal-unit-row:last-child { border-bottom: none; }
-.modal-footer { padding: 16px 24px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 10px; position: sticky; bottom: 0; background: var(--bg); }
-.form-group { display: flex; flex-direction: column; gap: 4px; }
-.form-group label { font-size: 12px; font-weight: 600; color: var(--text-secondary); }
-.form-input { padding: 9px 12px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-level2); color: var(--text); font-size: 13px; outline: none; width: 100%; box-sizing: border-box; }
-.form-input:focus { border-color: var(--accent-blue); }
-
-.live-preview { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
-.preview-item { font-size: 11px; padding: 2px 8px; background: #eff6ff; color: var(--accent-blue); border-radius: 8px; font-weight: 600; }
-
-.btn { padding: 10px 20px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; border: none; }
-.btn.primary { background: var(--accent-blue); color: white; }
-.btn.secondary { background: var(--bg-level2); color: var(--text); border: 1px solid var(--border); }
+.modal-card { border: none; box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.5); }
 </style>

@@ -1,28 +1,49 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
 :root {
-  --bg: #f0f4f8;
+  --bg: #f5f8fa;
   --sidebar-bg: #0a2540;
-  --sidebar-accent: #1a3a5c;
+  --sidebar-accent: #153a5c;
   --sidebar-hover: #1e4976;
   --sidebar-active: #0d7fe8;
   --sidebar-text: #94b8d8;
   --sidebar-text-bright: #ffffff;
-  --topbar-bg: #ffffff;
+  --topbar-bg: rgba(255, 255, 255, 0.85);
   --card-bg: #ffffff;
-  --border: #e2e8f0;
-  --text-primary: #0f172a;
-  --text-secondary: #64748b;
+  --border: #edf2f7;
+  --text-primary: #1e293b;
+  --text-secondary: #475569;
   --text-muted: #94a3b8;
-  --accent-blue: #0d7fe8;
-  --accent-teal: #0d9488;
-  --accent-green: #16a34a;
-  --accent-amber: #d97706;
-  --accent-red: #dc2626;
-  --accent-purple: #7c3aed;
-  --radius: 12px;
-  --shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 4px 16px rgba(0, 0, 0, 0.06);
-  --shadow-lg: 0 4px 6px rgba(0, 0, 0, 0.04), 0 10px 40px rgba(0, 0, 0, 0.10);
-  --sidebar-width: 260px;
-  --topbar-height: 64px;
+  --accent-blue: #3b82f6;
+  --accent-teal: #10b981;
+  --accent-green: #22c55e;
+  --accent-amber: #f59e0b;
+  --accent-red: #ef4444;
+  --accent-purple: #8b5cf6;
+  --accent-rose: #f43f5e;
+  --accent-indigo: #6366f1;
+  --radius: 16px;
+  --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --sidebar-width: 270px;
+  --sidebar-collapsed-width: 80px;
+  --topbar-height: 70px;
+
+  /* Role Colors */
+  --role-dokter-bg: #ebf8ff;
+  --role-dokter-text: #2b6cb0;
+  --role-perawat-bg: #e6fffa;
+  --role-perawat-text: #2c7a7b;
+  --role-bidan-bg: #fff5f7;
+  --role-bidan-text: #9f1239;
+  --role-pengelola-bg: #fffaf0;
+  --role-pengelola-text: #975a16;
+  --role-atlm-bg: #f5f3ff;
+  --role-atlm-text: #5b21b6;
+  --role-petugas-bg: #eef2ff;
+  --role-petugas-text: #3730a3;
+  --role-pengemudi-bg: #f8fafc;
+  --role-pengemudi-text: #475569;
 }
 
 *,
@@ -40,8 +61,15 @@ html, body, #__nuxt {
   padding: 0;
 }
 
+.layout-wrapper {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  background: var(--bg);
+}
+
 body {
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: 'Poppins', 'Plus Jakarta Sans', sans-serif;
   background: var(--bg);
   color: var(--text-primary);
   display: flex;
@@ -58,11 +86,40 @@ body {
   height: 100vh;
   overflow-y: auto;
   overflow-x: hidden;
-  transition: width .3s;
+  transition: all .3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
-  z-index: 100;
+  z-index: 1000;
   scrollbar-width: thin;
   scrollbar-color: var(--sidebar-accent) transparent;
+}
+
+#sidebar.collapsed {
+  width: var(--sidebar-collapsed-width);
+  min-width: var(--sidebar-collapsed-width);
+}
+
+#sidebar.collapsed .logo-text,
+#sidebar.collapsed .sidebar-section-label,
+#sidebar.collapsed .nav-text,
+#sidebar.collapsed .nav-badge,
+#sidebar.collapsed .chevron,
+#sidebar.collapsed .user-meta,
+#sidebar.collapsed .logout-btn {
+  display: none;
+}
+
+#sidebar.collapsed .nav-link,
+#sidebar.collapsed .user-info {
+  justify-content: center;
+  padding: 12px;
+}
+
+#sidebar.collapsed .submenu {
+  display: none !important;
+}
+
+#sidebar.collapsed .logo-icon {
+  margin: 0 auto;
 }
 
 .sidebar-logo {
@@ -514,14 +571,14 @@ body {
 }
 
 .metric-value {
-  font-size: 26px;
+  font-size: 32px;
   font-weight: 800;
   color: var(--text-primary);
   line-height: 1.1;
 }
 
 .metric-value.small {
-  font-size: 18px;
+  font-size: 22px;
 }
 
 .metric-sub {
@@ -1425,4 +1482,14 @@ tbody td.muted {
   max-width: 45px;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+/* --- Total Row Styling --- */
+.total-row, .grand-total-row { 
+  background-color: #dcfce7 !important; 
+  color: #166534 !important; 
+  font-weight: 800 !important; 
+}
+.total-row td, .grand-total-row td { 
+  border-top: 2px solid #22c55e !important; 
 }

@@ -11,9 +11,14 @@
       </div>
     </div>
 
-    <div v-if="pending" style="padding:40px;text-align:center;color:var(--text-muted)">Memuat data keuangan...</div>
+    <!-- LOADING STATE -->
+    <div v-if="loading && !items" style="padding:40px;text-align:center;color:var(--text-muted)">Memuat data keuangan...</div>
 
-    <template v-else>
+    <div v-else-if="error" style="padding:40px;text-align:center;color:#ef4444">
+        Gagal memuat data keuangan ({{ error.message }}).
+    </div>
+
+    <template v-else-if="items">
       <!-- Summary Cards -->
       <div class="metrics-grid" style="margin-bottom:20px">
         <div class="metric-card blue">
@@ -123,7 +128,7 @@
                 </tr>
 
                 <!-- Grand Total -->
-                <tr class="grand-total">
+                <tr class="grand-total-row">
                   <td colspan="2">TOTAL PAD</td>
                   <td class="right mono">Rp {{ formatRp(totals.blud) }}</td>
                   <td class="right">Rp {{ formatRp(totals.jaspel) }}</td>
@@ -219,7 +224,7 @@ definePageMeta({ layout: "main" });
 const { selectedPeriode } = useJaspelStore();
 const config = useRuntimeConfig();
 
-const { data: items, pending, execute: refresh } = await useApi<any[]>(() => `/keuangan-detail/${selectedPeriode.value}`);
+const { data: items, pending: loading, error, execute: refresh } = await useApi<any[]>(() => `/keuangan-detail/${selectedPeriode.value}`);
 
 // Subtotals & Totals
 const nonKapItems = computed(() => items.value?.filter(i => i.jenisPendapatan === 'Non Kapitasi') || []);
@@ -360,7 +365,7 @@ watch(selectedPeriode, () => refresh());
 .subtotal-row.non-kap-total { background: #f0f9ff; }
 .subtotal-row.pad-total { background: #f0fdf4; }
 .grand-total { background: #0f172a; color: #fff; font-weight: 800; }
-.grand-total td { border-color: #334155; }
+.grand-total td { color: #ffffff !important; border-color: #334155; }
 
 .mono { font-family: 'JetBrains Mono', monospace; font-size: 12px; }
 

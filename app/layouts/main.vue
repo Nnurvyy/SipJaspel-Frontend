@@ -1,5 +1,10 @@
+<script setup lang="ts">
+import { useJaspelStore } from '~/stores/jaspelStore';
+const { isSidebarCollapsed } = useJaspelStore();
+</script>
+
 <template>
-  <div style="display: flex; height: 100%; overflow: hidden; width: 100%;">
+  <div class="layout-wrapper" :class="{ 'sidebar-is-collapsed': isSidebarCollapsed }">
     <!-- SIDEBAR -->
     <LayoutMainSidebar />
 

@@ -57,6 +57,16 @@
                 </button>
               </td>
             </tr>
+            <!-- Total Row -->
+            <tr class="total-row">
+              <td colspan="2"><strong>TOTAL</strong></td>
+              <td colspan="8"></td>
+              <td class="right"><strong>{{ totalPoinKap }}</strong></td>
+              <td class="right"><strong>{{ totalBobotKap.toFixed(2) }}</strong></td>
+              <td class="right"><strong>{{ totalPoinNonKap }}</strong></td>
+              <td class="right"><strong>{{ totalBobotNonKap.toFixed(2) }}</strong></td>
+              <td></td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -162,16 +172,22 @@ import { useApi } from '../composables/useApi';
 import { useJaspelStore } from '../stores/jaspelStore';
 
 definePageMeta({ layout: 'main' });
-
+ 
 const { selectedPeriode } = useJaspelStore();
 const config = useRuntimeConfig();
+
+const { data: kehadiranData, pending, error, execute: refresh } = await useApi<any[]>(() => `/kehadiran/${selectedPeriode.value}`);
 
 const isEditOpen = ref(false);
 const saving = ref(false);
 const editForm = ref<any>({});
 const autoValues = ref<any>({});
 
-const { data: kehadiranData, pending, error, execute: refresh } = await useApi<any[]>(() => `/kehadiran/${selectedPeriode.value}`);
+// Totals
+const totalPoinKap = computed(() => kehadiranData.value?.reduce((a, b) => a + (b.jumlahPoinKapitasi || 0), 0) || 0);
+const totalBobotKap = computed(() => kehadiranData.value?.reduce((a, b) => a + (b.bobotKapitasi || 0), 0) || 0);
+const totalPoinNonKap = computed(() => kehadiranData.value?.reduce((a, b) => a + (b.jumlahPoinNonKapitasi || 0), 0) || 0);
+const totalBobotNonKap = computed(() => kehadiranData.value?.reduce((a, b) => a + (b.bobotNonKapitasi || 0), 0) || 0);
 
 const openEdit = (item: any) => {
   editForm.value = JSON.parse(JSON.stringify(item));

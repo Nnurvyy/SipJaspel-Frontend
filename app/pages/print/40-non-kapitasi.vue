@@ -5,9 +5,14 @@
       <p>Distribusi Jaspel 40% (Langsung) kategori Non Kapitasi — {{ selectedPeriode }}</p>
     </div>
 
-    <div v-if="pending" style="padding:40px;text-align:center;color:var(--text-muted)">Memuat data...</div>
+    <!-- LOADING STATE -->
+    <div v-if="loading && !data" style="padding:40px;text-align:center;color:var(--text-muted)">Memuat data...</div>
 
-    <div class="card" v-else>
+    <div v-else-if="error" style="padding:40px;text-align:center;color:#ef4444">
+        Gagal memuat data ({{ error.message }}).
+    </div>
+
+    <div class="card" v-else-if="data">
       <div class="table-scroll">
         <table class="report-table">
           <thead>
@@ -126,7 +131,7 @@ definePageMeta({ layout: 'main' });
 const { selectedPeriode } = useJaspelStore();
 const config = useRuntimeConfig();
 
-const { data, pending, execute: refresh } = await useApi<any[]>(() => `/jaspel-distribusi/print-40/${selectedPeriode.value}`);
+const { data, pending: loading, error, execute: refresh } = await useApi<any[]>(() => `/jaspel-distribusi/print-40/${selectedPeriode.value}`);
 
 const totals = computed(() => {
     return data.value?.reduce((acc, curr) => {
@@ -201,7 +206,6 @@ watch(selectedPeriode, () => refresh());
 .report-table th, .report-table td { border: 1px solid var(--border); padding: 12px; font-size: 13px; }
 .report-table th { background: var(--bg-level2); font-weight: 700; text-transform: uppercase; font-size: 11px; }
 
-.total-row { background: var(--bg-level2); font-weight: 800; }
 .highlight { color: var(--accent-blue); font-weight: 700; }
 .overridden { color: #f59e0b; }
 

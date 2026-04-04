@@ -257,11 +257,8 @@ watch(selectedPeriode, () => refresh());
 #tbl-rekap th, #tbl-rekap td { border: 1px solid var(--border); padding: 10px 12px; font-size: 11px; }
 #tbl-rekap th { background: var(--bg-level2); font-weight: 700; text-transform: uppercase; }
 
-.highlight { font-weight: 700; color: #1e293b; }
 .highlight.blue { color: var(--accent-blue); }
 .overridden { color: #f59e0b; }
-
-.total-row { background: var(--bg-level2); font-weight: 800; font-size: 11px; }
 
 /* Modal Styles Handled by global main.css */
 </style>

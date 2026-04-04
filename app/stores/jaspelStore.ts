@@ -58,6 +58,7 @@ const pageMap = {
 // Use an object to avoid ref unpacking issues when imported, or a ref but typed correctly.
 const isAuthenticated = ref(false);
 const selectedPeriode = ref('2026-01');
+const isSidebarCollapsed = ref(false);
 
 export const useJaspelStore = () => {
   const authCookie = useCookie('auth_token');
@@ -65,5 +66,14 @@ export const useJaspelStore = () => {
     isAuthenticated.value = true;
   }
 
-  return { bulanList, unitData, laporanData, pageMap, pegawaiList, isAuthenticated, selectedPeriode };
+  return { 
+    bulanList, 
+    unitData, 
+    laporanData, 
+    pageMap, 
+    pegawaiList, 
+    isAuthenticated, 
+    selectedPeriode,
+    isSidebarCollapsed
+  };
 };
