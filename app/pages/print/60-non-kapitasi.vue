@@ -21,11 +21,11 @@
               <th>Nama Pegawai</th>
               <th>Gol</th>
               <th>Jenis Ketenagaan</th>
-              <th>MK</th>
-              <th>RT</th>
-              <th>Msk</th>
-              <th>Hkr</th>
-              <th>Hadir (%)</th>
+              <th>Masa Kerja</th>
+              <th>Rangkap Tugas ADM</th>
+              <th>Jumlah Hari Masuk Kerja</th>
+              <th>Jumlah Hari Kerja</th>
+              <th>Prosentase Kehadiran</th>
               <th>Poin</th>
               <th>Bobot</th>
               <th class="right">Jaspel Non Kap</th>

@@ -49,6 +49,10 @@
                 <label>Penanggung Jawab</label>
                 <input v-model="formData.penanggungJawab" type="text" />
               </div>
+              <div class="form-group">
+                <label>No. Urut Tampil</label>
+                <input v-model.number="formData.urutan" type="number" placeholder="Contoh: 1, 2, 3..." />
+              </div>
             </div>
           </div>
           
@@ -91,7 +95,8 @@ const formData = ref({
   jenisKetenagaan: '',
   penanggungJawab: '',
   tmt: '',
-  lamaMasaKerja: 0
+  lamaMasaKerja: 0,
+  urutan: 0
 })
 
 watch(() => props.isOpen, (newVal) => {
@@ -103,7 +108,8 @@ watch(() => props.isOpen, (newVal) => {
       formData.value = {
         id: '', nama: '', nip: '', nomorRekening: '', namaBank: 'BJB', 
         npwp: '', golongan: '', jabatan: '', pangkatGolongan: '', 
-        jenisKetenagaan: '', penanggungJawab: '', tmt: '', lamaMasaKerja: 0
+        jenisKetenagaan: '', penanggungJawab: '', tmt: '', lamaMasaKerja: 0,
+        urutan: 0
       }
     }
   }
