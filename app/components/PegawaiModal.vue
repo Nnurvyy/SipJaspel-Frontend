@@ -42,26 +42,12 @@
                 <input v-model="formData.golongan" type="text" required placeholder="Contoh: III/A, Non-PNS" />
               </div>
               <div class="form-group">
-                <label>Pangkat / Golongan</label>
-                <input v-model="formData.pangkatGolongan" type="text" />
-              </div>
-              
-              <div class="form-group">
                 <label>Jenis Ketenagaan <span class="req">*</span></label>
                 <input v-model="formData.jenisKetenagaan" type="text" required />
               </div>
               <div class="form-group">
                 <label>Penanggung Jawab</label>
                 <input v-model="formData.penanggungJawab" type="text" />
-              </div>
-              
-              <div class="form-group">
-                <label>TMT (Terhitung Mulai Tanggal)</label>
-                <input v-model="formData.tmt" type="text" placeholder="Bulan-Tahun" />
-              </div>
-              <div class="form-group">
-                <label>Lama Masa Kerja (Bulan)</label>
-                <input v-model.number="formData.lamaMasaKerja" type="number" />
               </div>
             </div>
           </div>

@@ -2,158 +2,205 @@
   <div class="page">
     <div class="section-header">
       <h1>Print 60% PAD Murni</h1>
-      <p>Distribusi Jaspel Tidak Langsung dari PAD Murni — Januari 2026</p>
+      <p>Distribusi Jaspel 60% (Tidak Langsung) kategori PAD Murni — {{ selectedPeriode }}</p>
     </div>
 
     <div v-if="pending" style="padding:40px;text-align:center;color:var(--text-muted)">Memuat data...</div>
-    <div v-else-if="error" class="alert error" style="margin-top:20px">Gagal terhubung ke backend.</div>
 
     <div class="card" v-else>
-      <div class="card-header">
-        <div class="card-title">Daftar Penerimaan Jaspel — 60% PAD Murni (2026-01)</div>
-        <div class="card-subtitle">Kolom yang kosong dapat diisi manual melalui tombol Aksi</div>
-      </div>
       <div class="table-scroll">
-        <table id="tbl-print-60pad">
+        <table class="report-table">
           <thead>
             <tr>
               <th>No</th>
               <th>Nama Pegawai</th>
-              <th>Golongan</th>
+              <th>Gol</th>
               <th>Jenis Ketenagaan</th>
-              <th class="right">Masa Kerja</th>
-              <th class="right">Rangkap<br>Tugas ADM</th>
-              <th class="right">Jml Hari<br>Masuk Kerja</th>
-              <th class="right">Jml Hari<br>Kerja</th>
-              <th class="right">% Kehadiran</th>
-              <th class="right">Jml Poin</th>
-              <th class="right">Bobot</th>
-              <th class="right">Jumlah Jaspel</th>
-              <th>PPH (%)</th>
-              <th class="right">PPH (Rp)</th>
-              <th class="right">Jumlah Bersih</th>
-              <th>Aksi</th>
+              <th>MK</th>
+              <th>RT</th>
+              <th>Msk</th>
+              <th>Hkr</th>
+              <th>Hadir (%)</th>
+              <th>Poin</th>
+              <th>Bobot</th>
+              <th class="right">Jaspel PAD Murni</th>
+              <th class="right">PPh (%)</th>
+              <th class="right">PPh (Rp)</th>
+              <th class="right">Jaspel Bersih</th>
+              <th class="center">Aksi</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(item, idx) in tableData" :key="item.pegawaiId || idx">
+            <tr v-for="(row, idx) in data" :key="row.id">
               <td>{{ idx + 1 }}</td>
-              <td style="white-space:nowrap"><strong>{{ item.nama }}</strong></td>
-              <td><span class="badge blue">{{ item.golongan }}</span></td>
-              <td>{{ item.jenisKetenagaan || '-' }}</td>
-              <td class="right">{{ item.masaKerja || '-' }}</td>
-              <td class="right">{{ item.rangkapTugasAdm || '-' }}</td>
-              <td class="right">{{ item.hariMasukKerja || '-' }}</td>
-              <td class="right">{{ item.hariKerja || '-' }}</td>
-              <td class="right">{{ item.hariKerja > 0 ? ((item.hariMasukKerja / item.hariKerja) * 100).toFixed(1) + '%' : '-' }}</td>
-              <td class="right">{{ item.jumlahPoinKapitasi || '-' }}</td>
-              <td class="right">{{ item.bobot ? item.bobot.toFixed(3) : '-' }}</td>
-              <td class="right" style="font-weight:600">{{ item.jaspelPadMurni ? 'Rp ' + formatRp(item.jaspelPadMurni) : '-' }}</td>
-              <td>
-                <span class="badge" :class="item.pphPercent > 0.05 ? 'amber' : (item.pphPercent > 0 ? 'green' : 'gray')">
-                  {{ item.pphPercent ? (item.pphPercent * 100) + '%' : '-' }}
-                </span>
-              </td>
-              <td class="right">{{ item.pphPadMurni ? 'Rp ' + formatRp(item.pphPadMurni) : '-' }}</td>
-              <td class="right" style="font-weight:700;color:var(--accent-blue)">{{ item.bersihPadMurni ? 'Rp ' + formatRp(item.bersihPadMurni) : '-' }}</td>
-              <td>
-                <button class="action-btn edit" title="Edit" @click="openEdit(item)">
+              <td style="white-space:nowrap"><strong>{{ row.nama }}</strong></td>
+              <td>{{ row.golongan }}</td>
+              <td class="center">{{ row.jenisKetenagaanPoin }}</td>
+              <td>{{ row.masaKerja }}</td>
+              <td>{{ row.rangkapTugasAdm }}</td>
+              <td>{{ row.hariMasukKerja }}</td>
+              <td>{{ row.hariKerja }}</td>
+              <td>{{ (row.prosentaseKehadiran * 100).toFixed(0) }}%</td>
+              <td>{{ row.jumlahPoin?.toFixed(2) }}</td>
+              <td>{{ row.bobot?.toFixed(2) }}</td>
+              <td class="right" :class="{ 'overridden': row.isOverride }">Rp {{ formatRp(row.jaspelPadMurni) }}</td>
+              <td class="right">{{ row.pphPercentPad }}%</td>
+              <td class="right">Rp {{ formatRp(row.pphPadMurni) }}</td>
+              <td class="right highlight">Rp {{ formatRp(row.bersihPadMurni) }}</td>
+              <td class="center">
+                <button @click="openEdit(row)" class="action-btn edit">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
                 </button>
               </td>
             </tr>
-            <tr v-if="tableData.length === 0">
-              <td colspan="16" style="text-align:center;padding:20px;color:var(--text-muted)">Tidak ada data.</td>
-            </tr>
-            <tr v-if="tableData.length > 0" style="background:var(--bg-level2);font-weight:700;">
-              <td colspan="11" style="text-align:right;">TOTAL</td>
+          </tbody>
+          <tfoot>
+            <tr class="total-row">
+              <td colspan="10">TOTAL</td>
+              <td class="center">{{ totals.bobot.toFixed(2) }}</td>
               <td class="right">Rp {{ formatRp(totals.jaspel) }}</td>
               <td></td>
               <td class="right">Rp {{ formatRp(totals.pph) }}</td>
-              <td class="right" style="color:var(--accent-blue)">Rp {{ formatRp(totals.bersih) }}</td>
+              <td class="right">Rp {{ formatRp(totals.bersih) }}</td>
               <td></td>
             </tr>
-          </tbody>
+          </tfoot>
         </table>
       </div>
     </div>
 
+    <!-- Edit Modal -->
     <div v-if="isEditOpen" class="modal-overlay" @click.self="closeEdit">
       <div class="modal-card">
         <div class="modal-header">
-          <h3>Detail Data — {{ editForm.nama }}</h3>
+          <h3>Override Jaspel — {{ editForm.nama }}</h3>
           <button class="modal-close" @click="closeEdit">×</button>
         </div>
         <div class="modal-body">
-          <p style="font-size:13px;color:var(--text-muted)">Data dihitung otomatis dari bobot & kehadiran. Edit kehadiran di halaman Bobot Kapitasi.</p>
-          <div class="info-row"><div class="info-label">Jumlah Jaspel PAD</div><div class="info-value">Rp {{ formatRp(editForm.jaspelPadMurni) }}</div></div>
-          <div class="info-row"><div class="info-label">PPH</div><div class="info-value">Rp {{ formatRp(editForm.pphPadMurni) }}</div></div>
-          <div class="info-row"><div class="info-label">Jumlah Bersih</div><div class="info-value" style="color:var(--accent-blue)">Rp {{ formatRp(editForm.bersihPadMurni) }}</div></div>
+          <div class="form-group">
+            <label>Jumlah Jaspel Kotor (Rp)</label>
+            <input v-model.number="editForm.jaspelPadMurni" type="number" class="form-input" @input="recalc" />
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>PPH (%)</label>
+              <input v-model.number="editForm.pphPercentPad" type="number" class="form-input" @input="recalc" />
+            </div>
+            <div class="form-group">
+              <label>PPH Nominal (Rp)</label>
+              <input v-model.number="editForm.pphPadMurni" type="number" class="form-input" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Jaspel Bersih (Rp)</label>
+            <input v-model.number="editForm.bersihPadMurni" type="number" class="form-input" />
+          </div>
+          <div class="modal-actions-inline">
+             <button @click="resetToAuto" class="btn-text">Reset ke Otomatis</button>
+          </div>
         </div>
-        <div class="modal-footer"><button class="btn secondary" @click="closeEdit">Tutup</button></div>
+        <div class="modal-footer">
+          <button class="btn secondary" @click="closeEdit">Batal</button>
+          <button class="btn primary" @click="saveEdit" :disabled="saving">Simpan</button>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
-import { useApi } from '../../composables/useApi';
+import { ref, computed, watch } from 'vue';
+import { useApi } from '~/composables/useApi';
+import { useJaspelStore } from '~/stores/jaspelStore';
 
 definePageMeta({ layout: 'main' });
 
-const isEditOpen = ref(false);
-const editForm = ref<any>({});
+const { selectedPeriode } = useJaspelStore();
+const config = useRuntimeConfig();
 
-const { data: kehadiranData, pending: p1 } = await useApi<any[]>('/kehadiran/2026-01');
-const { data: print60Data, pending: p2, error } = await useApi<any[]>('/reports/print-60/2026-01');
-const pending = computed(() => p1.value || p2.value);
-
-const tableData = computed(() => {
-  if (!kehadiranData.value) return [];
-  return kehadiranData.value.map((k: any) => {
-    const p60 = print60Data.value?.find((p: any) => p.id === k.pegawaiId);
-    return {
-      ...k,
-      bobot: p60?.bobot || null,
-      jaspelPadMurni: p60?.jaspelPadMurni || null,
-      pphPercent: p60?.pphPercent || null,
-      pphPadMurni: p60?.pphPadMurni || null,
-      bersihPadMurni: p60?.bersihPadMurni || null,
-    };
-  });
-});
+const { data, pending, execute: refresh } = await useApi<any[]>(() => `/jaspel-distribusi/print-60/${selectedPeriode.value}`);
 
 const totals = computed(() => {
-  let jaspel = 0, pph = 0, bersih = 0;
-  tableData.value.forEach((r: any) => {
-    jaspel += r.jaspelPadMurni || 0;
-    pph += r.pphPadMurni || 0;
-    bersih += r.bersihPadMurni || 0;
-  });
-  return { jaspel: Math.round(jaspel), pph: Math.round(pph), bersih: Math.round(bersih) };
+    return data.value?.reduce((acc, curr) => {
+        acc.bobot += curr.bobot || 0;
+        acc.jaspel += curr.jaspelPadMurni || 0;
+        acc.pph += curr.pphPadMurni || 0;
+        acc.bersih += curr.bersihPadMurni || 0;
+        return acc;
+    }, { bobot: 0, jaspel: 0, pph: 0, bersih: 0 }) || { bobot: 0, jaspel: 0, pph: 0, bersih: 0 };
 });
 
-const formatRp = (n: number | null) => { if (!n) return '0'; return Math.round(n).toLocaleString('id-ID'); };
-const openEdit = (item: any) => { editForm.value = item; isEditOpen.value = true; };
+const isEditOpen = ref(false);
+const saving = ref(false);
+const editForm = ref<any>({});
+
+const openEdit = (row: any) => {
+    editForm.value = { ...row };
+    isEditOpen.value = true;
+};
 const closeEdit = () => { isEditOpen.value = false; };
+
+const recalc = () => {
+    const f = editForm.value;
+    f.pphPadMurni = Math.round(f.jaspelPadMurni * (f.pphPercentPad / 100));
+    f.bersihPadMurni = f.jaspelPadMurni - f.pphPadMurni;
+};
+
+const resetToAuto = async () => {
+    if(!confirm('Reset override untuk pegawai ini?')) return;
+    try {
+        await $fetch(`${config.public.apiBase}/jaspel-distribusi/${selectedPeriode.value}`, {
+            method: 'PUT',
+            body: {
+                pegawaiId: editForm.value.id,
+                print60PadJumlah: null,
+                print60PadPphPersen: null,
+                print60PadPphNominal: null,
+                print60PadBersih: null
+            }
+        });
+        await refresh();
+        closeEdit();
+    } catch (e) {
+        alert('Gagal reset data');
+    }
+};
+
+const saveEdit = async () => {
+    saving.value = true;
+    try {
+        await $fetch(`${config.public.apiBase}/jaspel-distribusi/${selectedPeriode.value}`, {
+            method: 'PUT',
+            body: {
+                pegawaiId: editForm.value.id,
+                print60PadJumlah: editForm.value.jaspelPadMurni,
+                print60PadPphPersen: editForm.value.pphPercentPad,
+                print60PadPphNominal: editForm.value.pphPadMurni,
+                print60PadBersih: editForm.value.bersihPadMurni
+            }
+        });
+        await refresh();
+        closeEdit();
+    } catch (e) {
+        alert('Gagal menyimpan data');
+    } finally {
+        saving.value = false;
+    }
+};
+
+const formatRp = (v: number) => new Intl.NumberFormat('id-ID').format(Math.round(v || 0));
+watch(selectedPeriode, () => refresh());
 </script>
 
 <style scoped>
-.action-btn { width: 28px; height: 28px; border-radius: 6px; border: 1px solid var(--border); background: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all .2s; color: var(--text-muted); }
-.action-btn:hover.edit { border-color: var(--accent-blue); color: var(--accent-blue); }
-.action-btn svg { width: 14px; height: 14px; }
-.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; display: flex; align-items: center; justify-content: center; }
-.modal-card { background: var(--bg); border-radius: 16px; width: 440px; max-width: 95vw; box-shadow: 0 20px 60px rgba(0,0,0,0.3); overflow: hidden; }
-.modal-header { padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
-.modal-header h3 { margin: 0; font-size: 15px; }
-.modal-close { background: none; border: none; font-size: 24px; cursor: pointer; color: var(--text-muted); }
-.modal-body { padding: 24px; display: flex; flex-direction: column; gap: 10px; }
-.modal-footer { padding: 16px 24px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; }
-.info-row { display: flex; justify-content: space-between; font-size: 13px; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
-.info-label { color: var(--text-muted); }
-.info-value { font-weight: 600; }
-.btn { padding: 10px 20px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; border: none; }
-.btn.secondary { background: var(--bg-level2); color: var(--text); border: 1px solid var(--border); }
-#tbl-print-60pad th { font-size: 11px; white-space: nowrap; }
+/* Reuse styles from non-kapitasi */
+.report-table { width: 100%; border-collapse: collapse; }
+.report-table th, .report-table td { border: 1px solid var(--border); padding: 12px; font-size: 13px; }
+.report-table th { background: var(--bg-level2); font-weight: 700; text-transform: uppercase; font-size: 11px; }
+
+.total-row { background: var(--bg-level2); font-weight: 800; }
+.highlight { color: #16a34a; font-weight: 700; }
+.overridden { color: #f59e0b; }
+
+/* Modal Styles Handled by global main.css */
 </style>

@@ -1,6 +1,7 @@
-import { useRuntimeConfig } from '#app'
+import { useRuntimeConfig, useFetch } from '#app'
+import type { MaybeRefOrGetter } from 'vue'
 
-export const useApi = <T>(url: string, options?: any) => {
+export const useApi = <T>(url: MaybeRefOrGetter<string>, options?: any) => {
   const config = useRuntimeConfig()
   const apiBaseUrl = config.public.apiBase
 
