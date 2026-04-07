@@ -15,7 +15,7 @@
           <div class="legend-title">Poin Jabatan Unit</div>
           <div class="legend-items">
             <span class="badge blue">PJ = 3</span>
-            <span class="badge purple">Koordinator = 2</span>
+            <span class="badge purple">Koordinator Pelayanan = 2</span>
             <span class="badge gray">Tidak ada jabatan = 1</span>
           </div>
         </div>
@@ -40,14 +40,12 @@
           <thead>
             <tr>
               <th>No</th>
-              <th>Nama</th>
+              <th>Nama Petugas</th>
+              <th class="bobot-th">Bobot</th>
               <th>Jabatan Unit</th>
-              <th>Risiko</th>
+              <th style="text-align:center">Risiko</th>
               <th>Unit Kerja</th>
               <th>Status</th>
-              <th style="text-align:center">Poin Jabatan</th>
-              <th style="text-align:center">Poin Risiko</th>
-              <th class="bobot-th">Bobot</th>
               <th>Aksi</th>
             </tr>
           </thead>
@@ -55,29 +53,20 @@
             <tr v-for="(item, idx) in rows" :key="item.pegawaiId">
               <td>{{ idx + 1 }}</td>
               <td style="white-space:nowrap"><strong>{{ item.nama }}</strong></td>
+              <td class="bobot-cell" style="text-align:center">
+                <strong>{{ item.bobot }}</strong>
+              </td>
               <td>
                 <span v-if="item.jabatanUnit" :class="jabatanBadgeClass(item.jabatanUnit)">
                   {{ item.jabatanUnit }}
                 </span>
                 <span v-else class="muted">—</span>
               </td>
-              <td>
-                <span v-if="item.risiko" :class="risikoBadgeClass(item.risiko)">
-                  {{ item.risiko }}
-                </span>
-                <span v-else class="muted">—</span>
+              <td style="text-align:center">
+                <span class="poin-chip">{{ item.poinRisiko || getPoinRisiko(item.risiko) }}</span>
               </td>
               <td>{{ item.unitKerja || '—' }}</td>
               <td>{{ item.status || '—' }}</td>
-              <td class="right">
-                <span class="poin-chip">{{ item.poinJabatan }}</span>
-              </td>
-              <td class="right">
-                <span class="poin-chip">{{ item.poinRisiko }}</span>
-              </td>
-              <td class="right bobot-cell">
-                <strong>{{ item.bobot }}</strong>
-              </td>
               <td>
                 <button class="action-btn edit" title="Edit" @click="openEdit(item)">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
@@ -116,7 +105,7 @@
             <select v-model="editForm.jabatanUnit" class="form-input">
               <option value="">— Tidak ada —</option>
               <option value="PJ">PJ (3 poin)</option>
-              <option value="Koordinator">Koordinator (2 poin)</option>
+              <option value="Koordinator Pelayanan">Koordinator Pelayanan (2 poin)</option>
               <option value="Tidak memiliki jabatan struktural">Tidak memiliki jabatan struktural (1 poin)</option>
             </select>
           </div>
@@ -185,7 +174,7 @@ await loadData()
 // Poin helpers (mirroring backend logic)
 const getPoinJabatan = (j: string) => {
   if (j === 'PJ') return 3
-  if (j === 'Koordinator') return 2
+  if (j === 'Koordinator Pelayanan' || j === 'Koordinator') return 2
   if (j === 'Tidak memiliki jabatan struktural') return 1
   return 0
 }
@@ -206,7 +195,7 @@ const previewBobot = computed(() => previewPoinJabatan.value + previewPoinRisiko
 // Badge classes
 const jabatanBadgeClass = (j: string) => {
   if (j === 'PJ') return 'badge blue'
-  if (j === 'Koordinator') return 'badge purple'
+  if (j === 'Koordinator Pelayanan' || j === 'Koordinator') return 'badge purple'
   return 'badge gray'
 }
 const risikoBadgeClass = (r: string) => {
