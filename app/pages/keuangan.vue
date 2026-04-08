@@ -168,7 +168,7 @@
 
           <div class="form-group">
             <label>Jumlah Pendapatan BLUD (Rp)</label>
-            <input v-model.number="form.jumlahBlud" type="number" class="form-input" @input="handleBludInput" />
+            <InputCurrency v-model="form.jumlahBlud" @update:modelValue="handleBludInput" />
           </div>
 
           <div class="form-divider">Kalkulasi Jaspel (Dapat diubah manual)</div>
@@ -176,22 +176,22 @@
           <div class="form-row">
             <div class="form-group">
               <label>Jaspel (60%)</label>
-              <input v-model.number="form.jaspel60" type="number" class="form-input" @input="handleJaspelInput" />
+              <InputCurrency v-model="form.jaspel60" @update:modelValue="handleJaspelInput" />
             </div>
             <div class="form-group">
               <label>Operasional (40%)</label>
-              <input v-model.number="form.operasional40" type="number" class="form-input" />
+              <InputCurrency v-model="form.operasional40" />
             </div>
           </div>
 
           <div class="form-row">
             <div class="form-group">
               <label>Tidak Langsung (60% TL)</label>
-              <input v-model.number="form.tidakLangsung" type="number" class="form-input" />
+              <InputCurrency v-model="form.tidakLangsung" />
             </div>
             <div class="form-group">
               <label>Langsung (40% L)</label>
-              <input v-model.number="form.langsung" type="number" class="form-input" />
+              <InputCurrency v-model="form.langsung" />
             </div>
           </div>
 

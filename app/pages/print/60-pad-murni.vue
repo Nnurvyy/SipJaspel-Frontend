@@ -84,7 +84,7 @@
         <div class="modal-body">
           <div class="form-group">
             <label>Jumlah Jaspel Kotor (Rp)</label>
-            <input v-model.number="editForm.jaspelPadMurni" type="number" class="form-input" @input="recalc" />
+            <InputCurrency v-model="editForm.jaspelPadMurni" @update:modelValue="recalc" />
           </div>
           <div class="form-row">
             <div class="form-group">
@@ -93,12 +93,12 @@
             </div>
             <div class="form-group">
               <label>PPH Nominal (Rp)</label>
-              <input v-model.number="editForm.pphPadMurni" type="number" class="form-input" />
+              <InputCurrency v-model="editForm.pphPadMurni" />
             </div>
           </div>
           <div class="form-group">
             <label>Jaspel Bersih (Rp)</label>
-            <input v-model.number="editForm.bersihPadMurni" type="number" class="form-input" />
+            <InputCurrency v-model="editForm.bersihPadMurni" />
           </div>
           <div class="modal-actions-inline">
              <button @click="resetToAuto" class="btn-text">Reset ke Otomatis</button>

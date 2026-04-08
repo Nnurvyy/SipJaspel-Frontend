@@ -98,15 +98,15 @@
         <div class="modal-body">
           <div class="form-group">
             <label>Jumlah Jaspel (Rp)</label>
-            <input v-model.number="editForm.jaspelNonKap" type="number" class="form-input" @input="recalc" />
+            <InputCurrency v-model="editForm.jaspelNonKap" @update:modelValue="recalc" />
           </div>
           <div class="form-group">
             <label>PPH Nominal (Rp)</label>
-            <input v-model.number="editForm.pphNonKap" type="number" class="form-input" @input="recalc" />
+            <InputCurrency v-model="editForm.pphNonKap" @update:modelValue="recalc" />
           </div>
           <div class="form-group">
             <label>Jaspel Bersih (Rp)</label>
-            <input v-model.number="editForm.bersihNonKap" type="number" class="form-input" />
+            <InputCurrency v-model="editForm.bersihNonKap" />
           </div>
           <div class="modal-actions-inline">
              <button @click="resetToAuto" class="btn-text">Reset ke Otomatis</button>
