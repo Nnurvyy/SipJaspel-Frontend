@@ -61,7 +61,6 @@
         <div class="submenu" :class="{ open: menus.rekap }">
           <NuxtLink to="/bobot-kapitasi" class="submenu-link" active-class="active">Bobot Kapitasi &amp; 60%</NuxtLink>
           <NuxtLink to="/rekap-all" class="submenu-link" active-class="active">Rekap Keseluruhan</NuxtLink>
-          <NuxtLink to="/print-jaspel" class="submenu-link" active-class="active">Cetak Lembar (Pilih)</NuxtLink>
           <div class="submenu-divider"></div>
           <NuxtLink to="/print/60-non-kapitasi" class="submenu-link small" active-class="active">60% Non Kapitasi</NuxtLink>
           <NuxtLink to="/print/60-pad-murni" class="submenu-link small" active-class="active">60% PAD Murni</NuxtLink>
