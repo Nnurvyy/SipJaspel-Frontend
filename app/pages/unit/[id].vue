@@ -409,6 +409,7 @@ const getRoleSubStyle = (key: string) => {
 
 // ===== State =====
 const rows = ref<any[]>([])
+const realUnitId = ref<string | null>(null)
 const summaryData = ref<any>(null)
 const pending = ref(true)
 const error = ref(false)
@@ -435,6 +436,7 @@ const loadData = async () => {
   try {
     // Load kinerja + bobot dari API
     const data: any = await $fetch(`${config.public.apiBase}/unit-kinerja/${unitId.value}/${selectedPeriode.value}`)
+    realUnitId.value = data.unitId
     rows.value = (data.pegawai || []).map((p: any) => ({
       ...p,
       tindakanPeran: p.tindakanPeran || {},
@@ -468,7 +470,8 @@ const savePagu = async () => {
     body[groupKey(g)] = { paguNonKap: pagu[groupKey(g)]?.nonKap || 0, paguPadMurni: pagu[groupKey(g)]?.padMurni || 0 }
   })
   try {
-    await $fetch(`${config.public.apiBase}/pagu-unit/${unitId.value}/${selectedPeriode.value}`, {
+    const idToUse = realUnitId.value || unitId.value
+    await $fetch(`${config.public.apiBase}/pagu-unit/${idToUse}/${selectedPeriode.value}`, {
       method: 'PUT',
       body
     })
@@ -673,7 +676,7 @@ const closeEdit = () => { isEditOpen.value = false }
 const saveEdit = async () => {
   saving.value = true
   try {
-    const unitDbId = `unit_${unitId.value}`
+    const unitDbId = realUnitId.value || `unit_${unitId.value}`
     await $fetch(`${config.public.apiBase}/unit-kinerja/${selectedPeriode.value}`, {
       method: 'PUT',
       body: {
