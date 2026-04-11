@@ -190,8 +190,8 @@
               <tr v-if="rows.length > 0" class="total-row">
                 <td colspan="3" style="text-align:right">TOTAL</td>
                 <template v-for="group in unitConfig.groups" :key="group.key + '_tot'">
-                  <td></td>
-                  <td></td>
+                  <td class="right">{{ colTotals[group.key + '_tindakan'] || '—' }}</td>
+                  <td class="right">{{ fmtNum(colTotals[group.key + '_adjusted']) }}</td>
                   <td class="right">{{ formatRp(colTotals[group.key + '_nonKap']) }}</td>
                   <td class="right">{{ formatRp(colTotals[group.key + '_pad']) }}</td>
                 </template>
@@ -604,6 +604,8 @@ const computeTotalJaspel = (item: any): number => computeTotalNonKap(item) + com
 const colTotals = computed(() => {
   const t: any = { totalNonKap: 0, totalPad: 0, totalJaspel: 0 }
   unitConfig.value.groups?.forEach((g: any) => {
+    t[g.key + '_tindakan'] = rows.value.reduce((sum, item) => sum + Number(item.tindakanPeran[g.key] || 0), 0)
+    t[g.key + '_adjusted'] = rows.value.reduce((sum, item) => sum + computeItemAdjusted(item, g.key), 0)
     t[g.key + '_nonKap'] = rows.value.reduce((sum, item) => sum + computeJaspelNonKap(item, g.key), 0)
     t[g.key + '_pad'] = rows.value.reduce((sum, item) => sum + computeJaspelPad(item, g.key), 0)
   })
