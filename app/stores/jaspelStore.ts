@@ -57,7 +57,6 @@ const pageMap = {
 
 // Use an object to avoid ref unpacking issues when imported, or a ref but typed correctly.
 const isAuthenticated = ref(false);
-const selectedPeriode = ref('2026-01');
 const isSidebarCollapsed = ref(false);
 
 export const useJaspelStore = () => {
@@ -65,6 +64,13 @@ export const useJaspelStore = () => {
   if (authCookie.value) {
     isAuthenticated.value = true;
   }
+
+  // Persist selected periode in a cookie so it stays after refresh
+  const selectedPeriode = useCookie('selected_periode', { 
+    default: () => '2026-01',
+    watch: true,
+    maxAge: 60 * 60 * 24 * 365 * 100 // Persist for 100 years (max allowed by browser)
+  });
 
   return { 
     bulanList, 
