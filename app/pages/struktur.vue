@@ -103,7 +103,7 @@
               </div>
               <div class="form-group poin-input-group">
                 <label>Poin</label>
-                <input v-model.number="editForm.poin1" type="number" class="form-input" :disabled="!editForm.jabatan1" />
+                <input v-model.number="editForm.poin1" type="number" class="form-input" :disabled="!editForm.jabatan1" @input="updateTotal" />
               </div>
             </div>
           </div>
@@ -121,7 +121,7 @@
               </div>
               <div class="form-group poin-input-group">
                 <label>Poin</label>
-                <input v-model.number="editForm.poin2" type="number" class="form-input" :disabled="!editForm.jabatan2" />
+                <input v-model.number="editForm.poin2" type="number" class="form-input" :disabled="!editForm.jabatan2" @input="updateTotal" />
               </div>
             </div>
           </div>
@@ -139,7 +139,7 @@
               </div>
               <div class="form-group poin-input-group">
                 <label>Poin</label>
-                <input v-model.number="editForm.poin3" type="number" class="form-input" :disabled="!editForm.jabatan3" />
+                <input v-model.number="editForm.poin3" type="number" class="form-input" :disabled="!editForm.jabatan3" @input="updateTotal" />
               </div>
             </div>
           </div>
@@ -208,10 +208,15 @@ const totalPoin = computed(() => {
 
 const recalcPoin = () => {
   const f = editForm.value
-  f.poin1 = f.jabatan1?.trim() ? 10 : 0
-  f.poin2 = f.jabatan2?.trim() ? 10 : 0
-  f.poin3 = f.jabatan3?.trim() ? 10 : 0
-  f.jumlahPoin = f.poin1 + f.poin2 + f.poin3
+  if (f.jabatan1?.trim() && (f.poin1 === 0 || f.poin1 === undefined)) f.poin1 = 10
+  if (f.jabatan2?.trim() && (f.poin2 === 0 || f.poin2 === undefined)) f.poin2 = 10
+  if (f.jabatan3?.trim() && (f.poin3 === 0 || f.poin3 === undefined)) f.poin3 = 10
+  updateTotal()
+}
+
+const updateTotal = () => {
+  const f = editForm.value
+  f.jumlahPoin = (Number(f.poin1) || 0) + (Number(f.poin2) || 0) + (Number(f.poin3) || 0)
 }
 
 const openEdit = (item: any) => {
