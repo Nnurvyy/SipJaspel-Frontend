@@ -86,7 +86,7 @@
               <div class="form-group">
                 <label>Tanggung Jawab Program</label>
                 <input v-model.number="editForm.poinTanggungJawab" type="number" class="form-input" @input="updateCalculations" />
-                <span class="hint">Auto: {{ autoValues.poinTanggungJawab }} (Struktur: {{ editForm.countInStruktur }})</span>
+                <span class="hint">Otomatis dari PJ & Koordinator: {{ autoValues.poinTanggungJawab }}</span>
               </div>
               <div class="form-group">
                 <label>Jenis Ketenagaan</label>
@@ -192,8 +192,11 @@ const totalBobotNonKap = computed(() => kehadiranData.value?.reduce((a, b) => a 
 const openEdit = (item: any) => {
   editForm.value = JSON.parse(JSON.stringify(item));
   // Record auto values for reset hint
+  // Note: we'll use the current poinTanggungJawab as the auto value if not overridden, 
+  // or we can calculate it if we had the raw sum. 
+  // For now, let's assume the one from API (if not overridden) is the sum.
   autoValues.value = {
-      poinTanggungJawab: item.countInStruktur === 1 ? 10 : item.countInStruktur === 2 ? 20 : item.countInStruktur > 2 ? 30 : 0,
+      poinTanggungJawab: item.sumStruktur, 
       poinMasaKerja: calculatePoinMK(item.lamaMasaKerja)
   };
   isEditOpen.value = true;
