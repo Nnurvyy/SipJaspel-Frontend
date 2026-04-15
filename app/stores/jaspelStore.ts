@@ -47,7 +47,7 @@ const laporanData = reactive([
 const pageMap = {
   'dashboard': {page: 'page-dashboard', heading: 'Dashboard', sub: 'Ringkasan visual kinerja Jaspel Puskesmas'},
   'data-dasar': {page: 'page-data-dasar', heading: 'Data Dasar & Kepegawaian', sub: 'Master data pegawai aktif'},
-  'struktur': {page: 'page-struktur', heading: 'Struktur Organisasi', sub: 'Susunan organisasi UPTD Puskesmas Majalengka'},
+  'struktur': {page: 'page-struktur', heading: 'PJ dan Koordinator', sub: 'Penanggung Jawab & Koordinator Program UPTD Puskesmas Majalengka'},
   'keuangan': {page: 'page-keuangan', heading: 'Data Keuangan & Parameter', sub: 'Realisasi pendapatan dan parameter Jaspel'},
   'rekap-all': {page: 'page-rekap-all', heading: 'Rekapitulasi Jaspel', sub: 'Distribusi Jaspel seluruh pegawai'},
   'bobot-kapitasi': {page: 'page-bobot-kapitasi', heading: 'Bobot Kapitasi & 60%', sub: 'Skema distribusi bobot staf'},

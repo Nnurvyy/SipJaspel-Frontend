@@ -31,7 +31,7 @@
         <div class="submenu" :class="{ open: menus.master }">
           <NuxtLink to="/data-dasar" class="submenu-link" active-class="active">Data Dasar</NuxtLink>
           <NuxtLink to="/bobot-staff" class="submenu-link" active-class="active">Bobot Staff</NuxtLink>
-          <NuxtLink to="/struktur" class="submenu-link" active-class="active">Struktur</NuxtLink>
+          <NuxtLink to="/struktur" class="submenu-link" active-class="active">PJ &amp; Koordinator</NuxtLink>
         </div>
       </div>
     </div>
