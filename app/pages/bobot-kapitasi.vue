@@ -85,7 +85,7 @@
             <div class="form-row items-4">
               <div class="form-group">
                 <label>Tanggung Jawab Program</label>
-                <input v-model.number="editForm.poinTanggungJawab" type="number" class="form-input" @input="updateCalculations" />
+                <input v-model.number="editForm.poinTanggungJawab" type="number" class="form-input" disabled />
                 <span class="hint">Otomatis dari PJ & Koordinator: {{ autoValues.poinTanggungJawab }}</span>
               </div>
               <div class="form-group">
