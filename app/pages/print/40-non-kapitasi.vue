@@ -20,7 +20,7 @@
               <th rowspan="2">No</th>
               <th rowspan="2">Nama Pegawai</th>
               <th rowspan="2">Gol</th>
-              <th colspan="12" class="center">Unit Pelayanan</th>
+              <th colspan="13" class="center">Unit Pelayanan</th>
               <th rowspan="2" class="right">Jumlah</th>
               <th rowspan="2" class="right">PPh (Rp)</th>
               <th rowspan="2" class="right">Bersih</th>
@@ -39,6 +39,7 @@
               <th class="rotate">Poli Umum</th>
               <th class="rotate">Gigi</th>
               <th class="rotate">Ambulans</th>
+              <th class="rotate">Gula Darah</th>
             </tr>
           </thead>
           <tbody>
@@ -58,6 +59,7 @@
               <td class="right muted small">{{ formatRp(row.unitBreakdown?.['Poli Umum']?.nonKap) }}</td>
               <td class="right muted small">{{ formatRp(row.unitBreakdown?.['Gigi']?.nonKap) }}</td>
               <td class="right muted small">{{ formatRp(row.unitBreakdown?.['Ambulans']?.nonKap) }}</td>
+              <td class="right muted small">{{ formatRp(row.unitBreakdown?.['Gula Darah']?.nonKap) }}</td>
               
               <td class="right highlight" :class="{ 'overridden': row.isOverride }">
                 Rp {{ formatRp(row.jaspelNonKap) }}
@@ -77,7 +79,7 @@
           </tbody>
           <tfoot>
             <tr class="total-row">
-              <td colspan="15">TOTAL</td>
+              <td colspan="16">TOTAL</td>
               <td class="right">Rp {{ formatRp(totals.jaspel) }}</td>
               <td class="right">Rp {{ formatRp(totals.pph) }}</td>
               <td class="right">Rp {{ formatRp(totals.bersih) }}</td>
@@ -208,6 +210,16 @@ watch(selectedPeriode, () => refresh());
 
 .highlight { color: var(--accent-blue); font-weight: 700; }
 .overridden { color: #f59e0b; }
+
+/* Sticky Table Rules */
+.table-scroll { max-height: calc(100vh - 200px); overflow: auto; position: relative; }
+.report-table th { position: sticky; top: 0; z-index: 10; background: var(--bg-level2); }
+.report-table thead tr:nth-child(2) th { top: 38px; z-index: 9; }
+.report-table td:nth-child(1), .report-table th:nth-child(1) { position: sticky; left: 0; z-index: 11; background: var(--bg-level1, #fff); min-width: 40px; }
+.report-table td:nth-child(2), .report-table th:nth-child(2) { position: sticky; left: 40px; z-index: 11; background: var(--bg-level1, #fff); min-width: 200px; }
+.report-table thead th:nth-child(1), .report-table thead th:nth-child(2) { z-index: 15; background: var(--bg-level2); }
+.report-table tfoot td { position: sticky; bottom: 0; z-index: 10; background: #f8fafc; }
+.report-table tfoot td:nth-child(1) { z-index: 12; }
 
 /* Modal Styles Handled by global main.css */
 </style>

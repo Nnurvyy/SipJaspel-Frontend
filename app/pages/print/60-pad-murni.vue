@@ -206,5 +206,14 @@ watch(selectedPeriode, () => refresh());
 .highlight { color: #16a34a; font-weight: 700; }
 .overridden { color: #f59e0b; }
 
+/* Sticky Table Rules */
+.table-scroll { max-height: calc(100vh - 200px); overflow: auto; position: relative; }
+.report-table th { position: sticky; top: 0; z-index: 10; background: var(--bg-level2); }
+.report-table td:nth-child(1), .report-table th:nth-child(1) { position: sticky; left: 0; z-index: 11; background: var(--bg-level1, #fff); min-width: 40px; }
+.report-table td:nth-child(2), .report-table th:nth-child(2) { position: sticky; left: 40px; z-index: 11; background: var(--bg-level1, #fff); min-width: 200px; }
+.report-table thead th:nth-child(1), .report-table thead th:nth-child(2) { z-index: 15; background: var(--bg-level2); }
+.report-table tfoot td { position: sticky; bottom: 0; z-index: 10; background: #f8fafc; }
+.report-table tfoot td:nth-child(1) { z-index: 12; }
+
 /* Modal Styles Handled by global main.css */
 </style>

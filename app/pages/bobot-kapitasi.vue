@@ -309,4 +309,13 @@ watch(selectedPeriode, () => refresh());
   right: -8px;
   font-size: 14px;
 }
+
+/* Sticky Table Rules */
+.table-scroll { max-height: calc(100vh - 200px); overflow: auto; position: relative; }
+#tbl-bobot th { position: sticky; top: 0; z-index: 10; background: var(--bg-level2); }
+#tbl-bobot td:nth-child(1), #tbl-bobot th:nth-child(1) { position: sticky; left: 0; z-index: 11; background: var(--bg-level1, #fff); min-width: 40px; }
+#tbl-bobot td:nth-child(2), #tbl-bobot th:nth-child(2) { position: sticky; left: 40px; z-index: 11; background: var(--bg-level1, #fff); min-width: 200px; }
+#tbl-bobot thead th:nth-child(1), #tbl-bobot thead th:nth-child(2) { z-index: 15; background: var(--bg-level2); }
+#tbl-bobot .total-row td { position: sticky; bottom: 0; z-index: 10; background: #f8fafc; }
+#tbl-bobot .total-row td:nth-child(1) { z-index: 12; }
 </style>

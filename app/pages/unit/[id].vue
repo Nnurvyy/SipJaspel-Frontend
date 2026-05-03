@@ -187,8 +187,8 @@
               </tr>
 
               <!-- Subtotal row -->
-              <tr v-if="rows.length > 0" class="total-row">
-                <td colspan="3" style="text-align:right">TOTAL</td>
+              <tr v-if="rows.length > 0" class="total-row sticky-footer">
+                <td colspan="3" style="text-align:right; position: sticky; left: 0; background: inherit; z-index: 5;">TOTAL</td>
                 <template v-for="group in unitConfig.groups" :key="group.key + '_tot'">
                   <td class="right">{{ colTotals[group.key + '_tindakan'] || '—' }}</td>
                   <td class="right">{{ fmtNum(colTotals[group.key + '_adjusted']) }}</td>
@@ -372,6 +372,14 @@ const UNIT_CONFIGS: Record<string, any> = {
       { key: 'pengelola', label: 'Pejabat Pengelola BLUD', subLabel: 'Pengelola', inputLabel: 'Poin', percent: 10 },
     ]
   },
+  'gula-darah': {
+    title: 'Gula Darah',
+    groups: [
+      { key: 'dokter', label: 'Dokter', subLabel: 'Tindakan', inputLabel: 'Jumlah', percent: 20 },
+      { key: 'perawat', label: 'Perawat', subLabel: 'Tindakan', inputLabel: 'Jumlah', percent: 70 },
+      { key: 'pengelola', label: 'Pejabat Pengelola BLUD', subLabel: 'Pengelola', inputLabel: 'Poin', percent: 10 },
+    ]
+  }
 }
 
 const unitConfig = computed(() => (UNIT_CONFIGS as any)[unitId.value] || UNIT_CONFIGS['ugd'])

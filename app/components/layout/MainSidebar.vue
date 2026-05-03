@@ -91,6 +91,7 @@
           <NuxtLink to="/unit/poli-umum" class="submenu-link" active-class="active">Poli Umum</NuxtLink>
           <NuxtLink to="/unit/gigi" class="submenu-link" active-class="active">Gigi</NuxtLink>
           <NuxtLink to="/unit/ambulans" class="submenu-link" active-class="active">Ambulans</NuxtLink>
+          <NuxtLink to="/unit/gula-darah" class="submenu-link" active-class="active">Gula Darah</NuxtLink>
         </div>
       </div>
     </div>

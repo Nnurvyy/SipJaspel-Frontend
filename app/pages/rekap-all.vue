@@ -260,5 +260,14 @@ watch(selectedPeriode, () => refresh());
 .highlight.blue { color: var(--accent-blue); }
 .overridden { color: #f59e0b; }
 
+/* Sticky Table Rules */
+.table-scroll { max-height: calc(100vh - 200px); overflow: auto; position: relative; }
+#tbl-rekap th { position: sticky; top: 0; z-index: 10; background: var(--bg-level2); }
+#tbl-rekap td:nth-child(1), #tbl-rekap th:nth-child(1) { position: sticky; left: 0; z-index: 11; background: var(--bg-level1, #fff); min-width: 40px; }
+#tbl-rekap td:nth-child(2), #tbl-rekap th:nth-child(2) { position: sticky; left: 40px; z-index: 11; background: var(--bg-level1, #fff); min-width: 200px; }
+#tbl-rekap thead th:nth-child(1), #tbl-rekap thead th:nth-child(2) { z-index: 15; background: var(--bg-level2); }
+#tbl-rekap tfoot td { position: sticky; bottom: 0; z-index: 10; background: #f8fafc; }
+#tbl-rekap tfoot td:nth-child(1) { z-index: 12; }
+
 /* Modal Styles Handled by global main.css */
 </style>
