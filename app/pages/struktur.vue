@@ -461,4 +461,14 @@ tfoot .total-row td {
 .btn { padding: 10px 20px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; border: none; transition: all .2s; }
 .btn.primary { background: var(--accent-blue); color: white; }
 .btn.secondary { background: var(--bg-level2); color: var(--text); border: 1px solid var(--border); }
+
+/* Sticky Table Rules */
+.table-scroll { max-height: calc(100vh - 200px); overflow: auto; position: relative; }
+#tbl-struktur th { position: sticky; top: 0; z-index: 10; background: #FCE4D6; box-shadow: 0 1px 0 var(--border); }
+#tbl-struktur thead tr:nth-child(2) th { top: 38px; z-index: 9; }
+#tbl-struktur td:nth-child(1), #tbl-struktur th:nth-child(1) { position: sticky; left: 0; z-index: 5; background: var(--bg-level1, #fff); width: 44px; min-width: 44px; max-width: 44px; box-shadow: 1px 0 0 var(--border); }
+#tbl-struktur td:nth-child(2), #tbl-struktur th:nth-child(2) { position: sticky; left: 44px; z-index: 5; background: var(--bg-level1, #fff); width: 220px; min-width: 220px; max-width: 220px; box-shadow: 1px 0 0 var(--border); white-space: normal; }
+#tbl-struktur thead th:nth-child(1), #tbl-struktur thead th:nth-child(2) { z-index: 15; background: #FCE4D6; }
+#tbl-struktur tfoot td, #tbl-struktur .total-row td { position: sticky; bottom: 0; z-index: 10; background: #FFF2CC; box-shadow: 0 -1px 0 var(--border); }
+#tbl-struktur tfoot td:nth-child(1), #tbl-struktur tfoot td:nth-child(2), #tbl-struktur .total-row td:nth-child(1), #tbl-struktur .total-row td:nth-child(2) { z-index: 12; background: #FFF2CC; }
 </style>

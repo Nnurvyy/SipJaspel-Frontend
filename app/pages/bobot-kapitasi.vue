@@ -312,10 +312,10 @@ watch(selectedPeriode, () => refresh());
 
 /* Sticky Table Rules */
 .table-scroll { max-height: calc(100vh - 200px); overflow: auto; position: relative; }
-#tbl-bobot th { position: sticky; top: 0; z-index: 10; background: var(--bg-level2); }
-#tbl-bobot td:nth-child(1), #tbl-bobot th:nth-child(1) { position: sticky; left: 0; z-index: 11; background: var(--bg-level1, #fff); min-width: 40px; }
-#tbl-bobot td:nth-child(2), #tbl-bobot th:nth-child(2) { position: sticky; left: 40px; z-index: 11; background: var(--bg-level1, #fff); min-width: 200px; }
-#tbl-bobot thead th:nth-child(1), #tbl-bobot thead th:nth-child(2) { z-index: 15; background: var(--bg-level2); }
-#tbl-bobot .total-row td { position: sticky; bottom: 0; z-index: 10; background: #f8fafc; }
-#tbl-bobot .total-row td:nth-child(1) { z-index: 12; }
+#tbl-bobot th { position: sticky; top: 0; z-index: 10; background: var(--bg-level2, #f8fafc); box-shadow: 0 1px 0 var(--border); }
+#tbl-bobot td:nth-child(1), #tbl-bobot th:nth-child(1) { position: sticky; left: 0; z-index: 5; background: var(--bg-level1, #fff); width: 40px; min-width: 40px; max-width: 40px; box-shadow: 1px 0 0 var(--border); }
+#tbl-bobot td:nth-child(2), #tbl-bobot th:nth-child(2) { position: sticky; left: 40px; z-index: 5; background: var(--bg-level1, #fff); width: 220px; min-width: 220px; max-width: 220px; box-shadow: 1px 0 0 var(--border); white-space: normal; }
+#tbl-bobot thead th:nth-child(1), #tbl-bobot thead th:nth-child(2) { z-index: 15; background: var(--bg-level2, #f8fafc); }
+#tbl-bobot tfoot td, #tbl-bobot .total-row td { position: sticky; bottom: 0; z-index: 10; background: #f8fafc; box-shadow: 0 -1px 0 var(--border); }
+#tbl-bobot tfoot td:nth-child(1), #tbl-bobot tfoot td:nth-child(2), #tbl-bobot .total-row td:nth-child(1), #tbl-bobot .total-row td:nth-child(2) { z-index: 12; background: #f8fafc; }
 </style>

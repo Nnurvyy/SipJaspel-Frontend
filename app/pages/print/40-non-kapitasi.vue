@@ -213,13 +213,11 @@ watch(selectedPeriode, () => refresh());
 
 /* Sticky Table Rules */
 .table-scroll { max-height: calc(100vh - 200px); overflow: auto; position: relative; }
-.report-table th { position: sticky; top: 0; z-index: 10; background: var(--bg-level2); }
+.report-table th { position: sticky; top: 0; z-index: 10; background: var(--bg-level2, #f8fafc); box-shadow: 0 1px 0 var(--border); }
 .report-table thead tr:nth-child(2) th { top: 38px; z-index: 9; }
-.report-table td:nth-child(1), .report-table th:nth-child(1) { position: sticky; left: 0; z-index: 11; background: var(--bg-level1, #fff); min-width: 40px; }
-.report-table td:nth-child(2), .report-table th:nth-child(2) { position: sticky; left: 40px; z-index: 11; background: var(--bg-level1, #fff); min-width: 200px; }
-.report-table thead th:nth-child(1), .report-table thead th:nth-child(2) { z-index: 15; background: var(--bg-level2); }
-.report-table tfoot td { position: sticky; bottom: 0; z-index: 10; background: #f8fafc; }
-.report-table tfoot td:nth-child(1) { z-index: 12; }
-
-/* Modal Styles Handled by global main.css */
+.report-table td:nth-child(1), .report-table th:nth-child(1) { position: sticky; left: 0; z-index: 5; background: var(--bg-level1, #fff); width: 40px; min-width: 40px; max-width: 40px; box-shadow: 1px 0 0 var(--border); }
+.report-table td:nth-child(2), .report-table th:nth-child(2) { position: sticky; left: 40px; z-index: 5; background: var(--bg-level1, #fff); width: 220px; min-width: 220px; max-width: 220px; box-shadow: 1px 0 0 var(--border); white-space: normal; }
+.report-table thead th:nth-child(1), .report-table thead th:nth-child(2) { z-index: 15; background: var(--bg-level2, #f8fafc); }
+.report-table tfoot td, .report-table .total-row td { position: sticky; bottom: 0; z-index: 10; background: #f8fafc; box-shadow: 0 -1px 0 var(--border); }
+.report-table tfoot td:nth-child(1), .report-table tfoot td:nth-child(2), .report-table .total-row td:nth-child(1), .report-table .total-row td:nth-child(2) { z-index: 12; background: #f8fafc; }
 </style>

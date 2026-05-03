@@ -818,6 +818,16 @@ const saveEdit = async () => {
 .modern-table thead th { background: #f8fafc; color: #475569; font-weight: 700; border-bottom: 2px solid #e2e8f0; }
 .modern-table .group-th { border-bottom-width: 3px !important; }
 
+/* Sticky Table Rules */
+.table-scroll { max-height: calc(100vh - 200px); overflow: auto; position: relative; }
+.modern-table th { position: sticky; top: 0; z-index: 10; background: var(--bg-level2, #f8fafc); box-shadow: 0 1px 0 var(--border); }
+.modern-table thead tr:nth-child(2) th { top: 38px; z-index: 9; }
+.modern-table td:nth-child(1), .modern-table th:nth-child(1) { position: sticky; left: 0; z-index: 5; background: var(--bg-level1, #fff); width: 40px; min-width: 40px; max-width: 40px; box-shadow: 1px 0 0 var(--border); }
+.modern-table td:nth-child(2), .modern-table th:nth-child(2) { position: sticky; left: 40px; z-index: 5; background: var(--bg-level1, #fff); width: 220px; min-width: 220px; max-width: 220px; box-shadow: 1px 0 0 var(--border); white-space: normal; }
+.modern-table thead th:nth-child(1), .modern-table thead th:nth-child(2) { z-index: 15; background: var(--bg-level2, #f8fafc); }
+.modern-table tfoot td, .modern-table .total-row td { position: sticky; bottom: 0; z-index: 10; background: #f8fafc; box-shadow: 0 -1px 0 var(--border); }
+.modern-table tfoot td:nth-child(1), .modern-table tfoot td:nth-child(2), .modern-table .total-row td:nth-child(1), .modern-table .total-row td:nth-child(2) { z-index: 12; background: #f8fafc; }
+
 .action-btn { background: #f8fafc; border: 1px solid #e2e8f0; }
 .action-btn:hover { background: #eff6ff; border-color: var(--accent-blue); color: var(--accent-blue); }
 

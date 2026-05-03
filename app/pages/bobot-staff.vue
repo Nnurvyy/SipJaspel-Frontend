@@ -278,5 +278,12 @@ const saveEdit = async () => {
 .bobot-th { background: #f0fdf4; color: var(--accent-teal); border-bottom: 2px solid var(--accent-teal) !important; }
 .bobot-cell { color: var(--accent-teal); font-size: 15px; }
 
+/* Sticky Table Rules */
+.table-scroll { max-height: calc(100vh - 200px); overflow: auto; position: relative; }
+#tbl-bobot-staff th { position: sticky; top: 0; z-index: 10; background: var(--bg-level2, #f8fafc); box-shadow: 0 1px 0 var(--border); }
+#tbl-bobot-staff td:nth-child(1), #tbl-bobot-staff th:nth-child(1) { position: sticky; left: 0; z-index: 5; background: var(--bg-level1, #fff); width: 40px; min-width: 40px; max-width: 40px; box-shadow: 1px 0 0 var(--border); }
+#tbl-bobot-staff td:nth-child(2), #tbl-bobot-staff th:nth-child(2) { position: sticky; left: 40px; z-index: 5; background: var(--bg-level1, #fff); width: 220px; min-width: 220px; max-width: 220px; box-shadow: 1px 0 0 var(--border); white-space: normal; }
+#tbl-bobot-staff thead th:nth-child(1), #tbl-bobot-staff thead th:nth-child(2) { z-index: 15; background: var(--bg-level2, #f8fafc); }
+
 /* Using global action-btn logic from main.css */
 </style>
