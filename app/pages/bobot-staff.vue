@@ -52,7 +52,7 @@
           <tbody>
             <tr v-for="(item, idx) in rows" :key="item.pegawaiId">
               <td>{{ idx + 1 }}</td>
-              <td style="white-space:nowrap"><strong>{{ item.nama }}</strong></td>
+              <td><strong>{{ item.nama }}</strong></td>
               <td class="bobot-cell" style="text-align:center">
                 <strong>{{ item.bobot }}</strong>
               </td>

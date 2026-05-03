@@ -47,7 +47,7 @@
           <tbody>
             <tr v-for="(item, idx) in filteredData" :key="item.id">
               <td>{{ idx + 1 }}</td>
-              <td style="white-space:nowrap"><strong>{{ item.nama }}</strong></td>
+              <td><strong>{{ item.nama }}</strong></td>
               <td class="muted" style="font-family:monospace">{{ item.nomorRekening || '-' }}</td>
               <td>{{ item.namaBank || '-' }}</td>
               <td class="muted" style="font-family:monospace">{{ item.npwp || '-' }}</td>

@@ -37,7 +37,7 @@
           <tbody>
             <tr v-for="(item, idx) in kehadiranData" :key="item.id">
               <td>{{ idx + 1 }}</td>
-              <td style="white-space:nowrap"><strong>{{ item.nama }}</strong></td>
+              <td><strong>{{ item.nama }}</strong></td>
               <!-- Logical Columns -->
               <td class="right" :class="{ 'overridden': item.isOverrideTJ }">{{ item.poinTanggungJawab }}</td>
               <td class="right">{{ item.poinKetenagaan }}</td>

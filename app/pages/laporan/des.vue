@@ -54,7 +54,7 @@
             </tr>
             <tr v-else v-for="(item, idx) in desData" :key="item.pegawaiId">
               <td>{{ idx + 1 }}</td>
-              <td style="white-space:nowrap"><strong>{{ item.nama }}</strong></td>
+              <td><strong>{{ item.nama }}</strong></td>
               <td><span class="badge blue">{{ item.golongan }}</span></td>
               <td>{{ item.jenisKetenagaan }}</td>
               

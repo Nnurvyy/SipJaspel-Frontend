@@ -45,7 +45,7 @@
           <tbody>
             <tr v-for="(row, idx) in data" :key="row.id">
               <td>{{ idx + 1 }}</td>
-              <td style="white-space:nowrap"><strong>{{ row.nama }}</strong></td>
+              <td><strong>{{ row.nama }}</strong></td>
               <td>{{ row.golongan }}</td>
               <td class="right muted small">{{ formatRp(row.unitBreakdown?.['UGD']?.pad) }}</td>
               <td class="right muted small">{{ formatRp(row.unitBreakdown?.['One Day Care']?.pad) }}</td>
