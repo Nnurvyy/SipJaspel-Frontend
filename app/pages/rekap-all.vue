@@ -23,7 +23,7 @@
         <div class="metric-value small">Rp {{ formatRp(totalStrips.lgsgPad) }}</div>
       </div>
       <div class="metric-card indigo">
-        <div class="metric-label">Lain-lain (TCM)</div>
+        <div class="metric-label">Lain-lain</div>
         <div class="metric-value small">Rp {{ formatRp(totalStrips.lainLainTotal) }}</div>
       </div>
     </div>

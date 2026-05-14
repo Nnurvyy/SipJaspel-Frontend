@@ -61,7 +61,14 @@
           </tbody>
           <tfoot>
             <tr class="total-row">
-              <td colspan="10">TOTAL</td>
+              <td colspan="3">TOTAL</td>
+              <td class="center">{{ totals.ketenagaan }}</td>
+              <td class="center">{{ totals.masaKerja }}</td>
+              <td class="center">{{ totals.rangkapTugas }}</td>
+              <td class="center">{{ totals.hariMasuk }}</td>
+              <td class="center">{{ totals.hariKerja }}</td>
+              <td class="center">{{ (totals.prosentase * 100 / (data.length || 1)).toFixed(0) }}%</td>
+              <td class="center">{{ totals.poin.toFixed(2) }}</td>
               <td class="center">{{ totals.bobot.toFixed(2) }}</td>
               <td class="right">Rp {{ formatRp(totals.jaspel) }}</td>
               <td></td>
@@ -70,6 +77,7 @@
               <td></td>
             </tr>
           </tfoot>
+
         </table>
       </div>
     </div>
@@ -127,12 +135,27 @@ const { data, pending: loading, error, execute: refresh } = await useApi<any[]>(
 
 const totals = computed(() => {
     return data.value?.reduce((acc, curr) => {
+        acc.ketenagaan += curr.jenisKetenagaanPoin || 0;
+        acc.masaKerja += curr.masaKerja || 0;
+        acc.rangkapTugas += curr.rangkapTugasAdm || 0;
+        acc.hariMasuk += curr.hariMasukKerja || 0;
+        acc.hariKerja += curr.hariKerja || 0;
+        acc.prosentase += curr.prosentaseKehadiran || 0;
+        acc.poin += curr.jumlahPoin || 0;
         acc.bobot += curr.bobot || 0;
         acc.jaspel += curr.jaspelPadMurni || 0;
         acc.pph += curr.pphPadMurni || 0;
         acc.bersih += curr.bersihPadMurni || 0;
         return acc;
-    }, { bobot: 0, jaspel: 0, pph: 0, bersih: 0 }) || { bobot: 0, jaspel: 0, pph: 0, bersih: 0 };
+    }, { 
+        ketenagaan: 0, masaKerja: 0, rangkapTugas: 0, hariMasuk: 0, 
+        hariKerja: 0, prosentase: 0, poin: 0, bobot: 0, 
+        jaspel: 0, pph: 0, bersih: 0 
+    }) || { 
+        ketenagaan: 0, masaKerja: 0, rangkapTugas: 0, hariMasuk: 0, 
+        hariKerja: 0, prosentase: 0, poin: 0, bobot: 0, 
+        jaspel: 0, pph: 0, bersih: 0 
+    };
 });
 
 const isEditOpen = ref(false);

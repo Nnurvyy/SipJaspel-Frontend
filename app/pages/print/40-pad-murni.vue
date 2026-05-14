@@ -79,13 +79,27 @@
           </tbody>
           <tfoot>
             <tr class="total-row">
-              <td colspan="16">TOTAL</td>
+              <td colspan="3">TOTAL</td>
+              <td class="right small">{{ formatRp(totals.breakdown['UGD']) }}</td>
+              <td class="right small">{{ formatRp(totals.breakdown['One Day Care']) }}</td>
+              <td class="right small">{{ formatRp(totals.breakdown['PONED']) }}</td>
+              <td class="right small">{{ formatRp(totals.breakdown['Konseling']) }}</td>
+              <td class="right small">{{ formatRp(totals.breakdown['Haji']) }}</td>
+              <td class="right small">{{ formatRp(totals.breakdown['KIA']) }}</td>
+              <td class="right small">{{ formatRp(totals.breakdown['USG']) }}</td>
+              <td class="right small">{{ formatRp(totals.breakdown['KB']) }}</td>
+              <td class="right small">{{ formatRp(totals.breakdown['LAB']) }}</td>
+              <td class="right small">{{ formatRp(totals.breakdown['Poli Umum']) }}</td>
+              <td class="right small">{{ formatRp(totals.breakdown['Gigi']) }}</td>
+              <td class="right small">{{ formatRp(totals.breakdown['Ambulans']) }}</td>
+              <td class="right small">{{ formatRp(totals.breakdown['Gula Darah']) }}</td>
               <td class="right">Rp {{ formatRp(totals.jaspel) }}</td>
               <td class="right">Rp {{ formatRp(totals.pph) }}</td>
               <td class="right">Rp {{ formatRp(totals.bersih) }}</td>
               <td></td>
             </tr>
           </tfoot>
+
         </table>
       </div>
     </div>
@@ -136,12 +150,18 @@ const config = useRuntimeConfig();
 const { data, pending: loading, error, execute: refresh } = await useApi<any[]>(() => `/jaspel-distribusi/print-40/${selectedPeriode.value}`);
 
 const totals = computed(() => {
+    const units = ['UGD', 'One Day Care', 'PONED', 'Konseling', 'Haji', 'KIA', 'USG', 'KB', 'LAB', 'Poli Umum', 'Gigi', 'Ambulans', 'Gula Darah'];
+    const initialBreakdown = Object.fromEntries(units.map(u => [u, 0]));
+
     return data.value?.reduce((acc, curr) => {
+        units.forEach(u => {
+            acc.breakdown[u] += curr.unitBreakdown?.[u]?.pad || 0;
+        });
         acc.jaspel += curr.jaspelPadMurni || 0;
         acc.pph += curr.pphPadMurni || 0;
         acc.bersih += curr.bersihPadMurni || 0;
         return acc;
-    }, { jaspel: 0, pph: 0, bersih: 0 }) || { jaspel: 0, pph: 0, bersih: 0 };
+    }, { breakdown: initialBreakdown, jaspel: 0, pph: 0, bersih: 0 }) || { breakdown: initialBreakdown, jaspel: 0, pph: 0, bersih: 0 };
 });
 
 const isEditOpen = ref(false);
