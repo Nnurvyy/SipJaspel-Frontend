@@ -15,8 +15,8 @@
     <div class="card summary-card" style="margin-bottom:20px; padding: 20px;">
         <div style="display:flex; justify-content: space-between; align-items: center;">
             <div>
-                <div style="font-size: 12px; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Total Dana Tersedia (Operasional 40%)</div>
-                <div style="font-size: 24px; font-weight: 800; color: var(--accent-teal);">Rp {{ formatRp(totalBudget) }}</div>
+                <div style="font-size: 12px; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Total Dana Tersedia (Jaspel 60%)</div>
+                <div style="font-size: 24px; font-weight: 800; color: var(--accent-blue);">Rp {{ formatRp(totalBudget) }}</div>
             </div>
             <div style="text-align: right;">
                 <div style="font-size: 12px; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Pagu Petugas</div>
@@ -154,7 +154,7 @@ const loadData = async () => {
         // 2. Fetch budget from keuangan-detail
         const keuangan: any[] = await $fetch(`${config.public.apiBase}/keuangan-detail/${selectedPeriode.value}`);
         const tcmEntry = keuangan.find(i => i.jenisPendapatan === 'Lain - lain' && i.namaLayanan?.toLowerCase().includes('tcm'));
-        totalBudget.value = tcmEntry ? tcmEntry.operasional40 : 0;
+        totalBudget.value = tcmEntry ? tcmEntry.jaspel60 : 0;
     } catch (e) {
         console.error(e);
     } finally {
@@ -292,8 +292,8 @@ const formatRp = (num: number | undefined) => {
 .text-danger { color: #ef4444; }
 
 .summary-card {
-    background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%);
-    border-left: 5px solid var(--accent-teal);
+    background: linear-gradient(135deg, #ffffff 0%, #eff6ff 100%);
+    border-left: 5px solid var(--accent-blue);
 }
 
 /* Searchable Select */

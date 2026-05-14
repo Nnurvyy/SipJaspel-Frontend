@@ -66,6 +66,8 @@
           <NuxtLink to="/print/60-pad-murni" class="submenu-link small" active-class="active">60% PAD Murni</NuxtLink>
           <NuxtLink to="/print/40-non-kapitasi" class="submenu-link small" active-class="active">40% Non Kapitasi</NuxtLink>
           <NuxtLink to="/print/40-pad-murni" class="submenu-link small" active-class="active">40% PAD Murni</NuxtLink>
+          <NuxtLink to="/print/lain-lain" class="submenu-link small" active-class="active">Lain-lain</NuxtLink>
+
         </div>
       </div>
     </div>

@@ -22,6 +22,10 @@
         <div class="metric-label">Lgsg PAD Murni (40%)</div>
         <div class="metric-value small">Rp {{ formatRp(totalStrips.lgsgPad) }}</div>
       </div>
+      <div class="metric-card indigo">
+        <div class="metric-label">Lain-lain (TCM)</div>
+        <div class="metric-value small">Rp {{ formatRp(totalStrips.lainLainTotal) }}</div>
+      </div>
     </div>
     
     <div class="card">
@@ -52,6 +56,7 @@
               <th class="right">Non Kap Lgsg</th>
               <th class="right">PAD Lgsg</th>
               <th class="right">L (40%)</th>
+              <th class="right">Lain-lain</th>
               <th class="right highlight">Total Jaspel</th>
               <th>PPh (%)</th>
               <th class="right">PPh (Rp)</th>
@@ -70,6 +75,7 @@
               <td class="right">{{ formatRp(item.lgsgNonKap) }}</td>
               <td class="right">{{ formatRp(item.lgsgPad) }}</td>
               <td class="right" style="font-weight:600">{{ formatRp(item.totalL) }}</td>
+              <td class="right" style="font-weight:600">{{ formatRp(item.lainLain) }}</td>
               
               <td class="right highlight" :class="{ 'overridden': item.isOverride }">Rp {{ formatRp(item.totalJaspel) }}</td>
               <td>{{ item.pphPercent }}%</td>
@@ -94,7 +100,9 @@
               <td class="right">{{ formatRp(totalStrips.lgsgNonKap) }}</td>
               <td class="right">{{ formatRp(totalStrips.lgsgPad) }}</td>
               <td class="right">{{ formatRp(totalStrips.lgsgTotal) }}</td>
+              <td class="right">{{ formatRp(totalStrips.lainLainTotal) }}</td>
               <td class="right">Rp {{ formatRp(totalStrips.jaspelTotal) }}</td>
+
               <td></td>
               <td class="right">Rp {{ formatRp(totalStrips.pphTotal) }}</td>
               <td class="right">Rp {{ formatRp(totalStrips.bersihTotal) }}</td>
@@ -178,19 +186,23 @@ const filteredData = computed(() => {
 const totalStrips = computed(() => {
   let tlNK = 0; let tlPad = 0; let tlT = 0; 
   let lNK = 0; let lPad = 0; let lT = 0;
+  let lainT = 0;
   let jT = 0; let pT = 0; let bT = 0;
   
   filteredData.value.forEach((r: any) => {
       tlNK += r.tlNonKap; tlPad += r.tlPad; tlT += r.totalTL;
       lNK += r.lgsgNonKap; lPad += r.lgsgPad; lT += r.totalL;
+      lainT += r.lainLain || 0;
       jT += r.totalJaspel; pT += r.pphNominal; bT += r.takeHomePay;
   });
   
   return { 
     tlNonKap: tlNK, tlPad, tlTotal: tlT,
     lgsgNonKap: lNK, lgsgPad: lPad, lgsgTotal: lT,
+    lainLainTotal: lainT,
     jaspelTotal: jT, pphTotal: pT, bersihTotal: bT
   };
+
 })
 
 const formatRp = (v: number) => new Intl.NumberFormat('id-ID').format(Math.round(v || 0));
