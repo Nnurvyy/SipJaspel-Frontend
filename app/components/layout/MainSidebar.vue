@@ -96,6 +96,21 @@
       </div>
     </div>
 
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Lain-lain</div>
+      <div class="nav-item">
+        <div class="nav-link" :class="{ open: menus.lainLain }" @click="menus.lainLain = !menus.lainLain">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+          <span class="nav-text">Lain - lain</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+        <div class="submenu" :class="{ open: menus.lainLain }">
+          <NuxtLink to="/lain-lain/tcm" class="submenu-link" active-class="active">TCM</NuxtLink>
+        </div>
+      </div>
+    </div>
+
+
     <div class="sidebar-footer">
       <div class="user-info">
         <div class="user-avatar">EE</div>
@@ -125,7 +140,8 @@ const menus = reactive({
   master: false,
   pengelolaan: false,
   rekap: false,
-  unit: false
+  unit: false,
+  lainLain: false
 });
 
 watchEffect(() => {
@@ -143,7 +159,11 @@ watchEffect(() => {
   if (path.includes('/unit')) {
     menus.unit = true;
   }
+  if (path.includes('/lain-lain')) {
+    menus.lainLain = true;
+  }
 });
+
 
 const handleLogout = () => {
   const token = useCookie('auth_token');

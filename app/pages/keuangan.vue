@@ -127,9 +127,42 @@
                   <td></td>
                 </tr>
 
+                <!-- LAIN-LAIN SECTION -->
+                <tr class="group-header">
+                  <td colspan="8" class="group-label lain-lain">LAIN - LAIN</td>
+                </tr>
+                <tr v-for="row in lainLainItems" :key="row.id">
+                  <td class="muted">Lain - lain</td>
+                  <td>{{ row.namaLayanan }}</td>
+                  <td class="right mono">Rp {{ formatRp(row.jumlahBlud) }}</td>
+                  <td class="right">Rp {{ formatRp(row.jaspel60) }}</td>
+                  <td class="right">Rp {{ formatRp(row.operasional40) }}</td>
+                  <td class="right">—</td>
+                  <td class="right">—</td>
+                  <td class="center">
+                    <div class="action-group">
+                      <button @click="openEdit(row)" class="action-btn edit">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                      </button>
+                      <button @click="deleteItem(row.id)" class="action-btn delete">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr class="subtotal-row lain-lain-total">
+                  <td colspan="2"><strong>Total Lain-lain</strong></td>
+                  <td class="right mono"><strong>Rp {{ formatRp(subtotals.lainLain.blud) }}</strong></td>
+                  <td class="right"><strong>Rp {{ formatRp(subtotals.lainLain.jaspel) }}</strong></td>
+                  <td class="right"><strong>Rp {{ formatRp(subtotals.lainLain.operasional) }}</strong></td>
+                  <td class="right">—</td>
+                  <td class="right">—</td>
+                  <td></td>
+                </tr>
+
                 <!-- Grand Total -->
                 <tr class="grand-total-row">
-                  <td colspan="2">TOTAL PAD</td>
+                  <td colspan="2">GRAND TOTAL</td>
                   <td class="right mono">Rp {{ formatRp(totals.blud) }}</td>
                   <td class="right">Rp {{ formatRp(totals.jaspel) }}</td>
                   <td class="right">Rp {{ formatRp(totals.operasional) }}</td>
@@ -158,6 +191,7 @@
               <select v-model="form.jenisPendapatan" class="form-input">
                 <option value="Non Kapitasi">Non Kapitasi</option>
                 <option value="PAD Murni">PAD Murni</option>
+                <option value="Lain - lain">Lain - lain</option>
               </select>
             </div>
             <div class="form-group">
@@ -229,6 +263,7 @@ const { data: items, pending: loading, error, execute: refresh } = await useApi<
 // Subtotals & Totals
 const nonKapItems = computed(() => items.value?.filter(i => i.jenisPendapatan === 'Non Kapitasi') || []);
 const padMurniItems = computed(() => items.value?.filter(i => i.jenisPendapatan === 'PAD Murni') || []);
+const lainLainItems = computed(() => items.value?.filter(i => i.jenisPendapatan === 'Lain - lain') || []);
 
 const calculateTotals = (list: any[]) => {
   return list.reduce((acc, curr) => {
@@ -243,18 +278,20 @@ const calculateTotals = (list: any[]) => {
 
 const subtotals = computed(() => ({
   nonKap: calculateTotals(nonKapItems.value),
-  pad: calculateTotals(padMurniItems.value)
+  pad: calculateTotals(padMurniItems.value),
+  lainLain: calculateTotals(lainLainItems.value)
 }));
 
 const totals = computed(() => {
   const nk = subtotals.value.nonKap;
   const pad = subtotals.value.pad;
+  const lain = subtotals.value.lainLain;
   return {
-    blud: nk.blud + pad.blud,
-    jaspel: nk.jaspel + pad.jaspel,
-    operasional: nk.operasional + pad.operasional,
-    tidakLangsung: nk.tl + pad.tl,
-    langsung: nk.l + pad.l
+    blud: nk.blud + pad.blud + lain.blud,
+    jaspel: nk.jaspel + pad.jaspel + lain.jaspel,
+    operasional: nk.operasional + pad.operasional + lain.operasional,
+    tidakLangsung: nk.tl + pad.tl + lain.tl,
+    langsung: nk.l + pad.l + lain.l
   };
 });
 
@@ -301,8 +338,13 @@ const handleBludInput = () => {
 };
 
 const handleJaspelInput = () => {
-    form.value.tidakLangsung = Math.round(form.value.jaspel60 * 0.6);
-    form.value.langsung = Math.round(form.value.jaspel60 * 0.4);
+    if (form.value.jenisPendapatan === 'Lain - lain') {
+        form.value.tidakLangsung = 0;
+        form.value.langsung = 0;
+    } else {
+        form.value.tidakLangsung = Math.round(form.value.jaspel60 * 0.6);
+        form.value.langsung = Math.round(form.value.jaspel60 * 0.4);
+    }
 };
 
 const resetToAuto = () => {
@@ -361,9 +403,11 @@ watch(selectedPeriode, () => refresh());
 .group-label { font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
 .group-label.non-kap { background: #e0f2fe; color: #0369a1; }
 .group-label.pad-murni { background: #dcfce7; color: #166534; }
+.group-label.lain-lain { background: #fef3c7; color: #92400e; }
 
 .subtotal-row.non-kap-total { background: #f0f9ff; }
 .subtotal-row.pad-total { background: #f0fdf4; }
+.subtotal-row.lain-lain-total { background: #fffbeb; }
 .grand-total { background: #0f172a; color: #fff; font-weight: 800; }
 .grand-total td { color: #ffffff !important; border-color: #334155; }
 
